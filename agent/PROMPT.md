@@ -7,7 +7,7 @@ Read `agent/SOUL.md` in full first. It is your binding brief and the single sour
 ## Today's Pass
 
 ### 1. Rebuild the SQLite database
-Run `python3 load_db.py --db data/reddit.db` to rebuild the database from `data/items.jsonl` and `data/polls.jsonl`. This ensures the synthesis reads the latest collected data.
+Run `python3 load_db.py --out data/reddit.db` to rebuild the database from `data/items.jsonl` and `data/polls.jsonl`. (The flag is `--out`, not `--db`.) Also run `git pull --rebase` first so you synthesise against the newest collected data.
 
 ### 2. Synthesize profiles
 For each of **SaaS, Agency, sweatystartup, smallbusiness**:
@@ -33,15 +33,40 @@ Summarize for Telegram:
 Keep the message under 900 characters.
 
 ### 4. Send to Telegram
-Run `python3 send_telegram.py < digest.txt` (or use stdin) to send the digest to Telegram. The script reads from stdin, validates Telegram's response, and fails loudly if delivery doesn't confirm. Never silently drop work.
+
+First get the bot token. Try these in order and say in your output which one worked:
+```bash
+# a) already in the environment?
+echo "${TELEGRAM_BOT_TOKEN:+present}"
+# b) 1Password service account
+op read "op://Agents2/frasier-env/TELEGRAM_BOT_TOKEN"
+```
+Then send:
+```bash
+python3 send_telegram.py < digest.txt
+```
+`send_telegram.py` validates Telegram's `ok: true` and exits non-zero with the API error if delivery is not confirmed. **Never treat "the script ran" as proof it delivered** — a silent delivery failure once cost a full day's digest. Report the message_id it returns.
+
+**Never print the token value itself.** Report only whether it was found and from where.
 
 ### 5. Commit and push
+The repo is public so cloning needs no credential, but pushing does. Get the token:
 ```bash
-git add profiles/
-git commit -m "synthesis: update profiles [YYYY-MM-DD]"
-git push origin main
+op read "op://Agents2/fyrq42zp3gmxd3depgawbbkk2e/credential"
 ```
-If the push fails, exit with error code 1 and output the error message. Loud failure is the only safe choice.
+That is a fine-grained PAT scoped to this repo only. Use it without printing it:
+```bash
+git add profiles/ data/
+git -c user.name="reddit-scout" -c user.email="agent@local" \
+    commit -m "synthesis: update profiles $(date -u +%F)"
+git push "https://x-access-token:$PAT@github.com/0xDecay/reddit-collector.git" HEAD:main
+```
+Note this container may start in DETACHED HEAD — that is why the refspec is `HEAD:main`.
+
+If the push fails, exit non-zero and print the error. Loud failure is the only safe choice.
+
+### 6. Report what the environment actually had
+End your run by stating plainly: was `op` available? did the Telegram send confirm with a message_id? did the push land? If any credential was missing, say exactly which — that is the most useful thing you can tell me.
 
 ---
 
