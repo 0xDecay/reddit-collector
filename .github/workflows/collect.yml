@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: set-matrix
         run: |
-          subs=$(grep -v '^[[:space:]]*$' subreddits.txt | jq -R . | jq -s .)
+          subs=$(grep -v '^[[:space:]]*$' subreddits.txt | jq -R . | jq -c -s .)
           echo "matrix={\"subreddit\":$subs}" >> $GITHUB_OUTPUT
 
   collect:
@@ -77,18 +77,35 @@ jobs:
         run: |
           set -e
 
-          # Ensure data/ exists
           mkdir -p data/
 
-          # Merge items.jsonl: concatenate all subreddit artifacts in order
+          # Load baseline items.jsonl from git (all existing items at checkout).
+          # Each artifact contains all existing items + new items for its subreddit.
+          # We must deduplicate by permalink to avoid storing duplicates.
           > data/items.jsonl.tmp
+          if [ -f data/items.jsonl ]; then
+            # Track baseline permalinks to filter dupes
+            baseline_permalinks=$(jq -r '.permalink // empty' data/items.jsonl 2>/dev/null | sort -u)
+            # Append baseline items to tmp (preserve original order)
+            cat data/items.jsonl >> data/items.jsonl.tmp
+          fi
+
+          # Merge items.jsonl: extract only NEW items from artifacts (not in baseline).
           for artifact_dir in artifacts/data-*/; do
             if [ -f "$artifact_dir/items.jsonl" ]; then
-              cat "$artifact_dir/items.jsonl" >> data/items.jsonl.tmp
+              while IFS= read -r line; do
+                if [ -z "$line" ]; then continue; fi
+                permalink=$(echo "$line" | jq -r '.permalink // empty' 2>/dev/null)
+                if [ -z "$permalink" ]; then continue; fi
+                # Only append if permalink is not in baseline
+                if ! echo "$baseline_permalinks" | grep -Fxq "$permalink"; then
+                  echo "$line" >> data/items.jsonl.tmp
+                fi
+              done < "$artifact_dir/items.jsonl"
             fi
           done
 
-          # Merge polls.jsonl: concatenate all subreddit artifacts in order
+          # Merge polls.jsonl: concatenate all poll records (no deduplication needed).
           > data/polls.jsonl.tmp
           for artifact_dir in artifacts/data-*/; do
             if [ -f "$artifact_dir/polls.jsonl" ]; then
