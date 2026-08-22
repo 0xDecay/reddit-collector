@@ -39,12 +39,24 @@ def strip_html(text):
     return text
 
 
+_fetched_once = False
+
+
 def fetch_feed(url):
     """
     Fetch an Atom feed from URL. Return (status_code, xml_str) or (status_code, None).
-    Sleeps REQUEST_INTERVAL_SEC before request to respect rate limit.
+    Sleeps REQUEST_INTERVAL_SEC BETWEEN requests to respect the rate limit.
     """
-    time.sleep(REQUEST_INTERVAL_SEC)
+    # ponytail: the limit is ~1 request/min per IP, so it applies BETWEEN requests
+    # from this process -- the first one has nothing to be spaced from. Sleeping
+    # before it burned a full minute per run for nothing, which matters now that
+    # each subreddit is its own CI job on its own IP making only two requests.
+    # Ceiling: this assumes nothing else is polling Reddit from this same IP. True
+    # for a fresh CI runner; would not be true if two collectors shared a host.
+    global _fetched_once
+    if _fetched_once:
+        time.sleep(REQUEST_INTERVAL_SEC)
+    _fetched_once = True
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(req) as resp:
