@@ -13,7 +13,17 @@ from urllib.error import URLError
 
 # Configuration
 POLLS_JSONL = os.environ.get("WATCHDOG_POLLS", "data/polls.jsonl")
-STALL_MIN = 15  # GitHub Actions runs every 5 min; 3 missed cycles = 15 min silence
+# Data is committed once per run, at the end, so the newest COMMITTED poll
+# legitimately ages during a run even while polling is healthy. Worst normal
+# case = run length (25 min) + GitHub's scheduler gap (measured at 23 min on
+# 2026-08-22). 60 leaves headroom above that.
+#
+# The old value was 15, with the comment "GitHub Actions runs every 5 min" --
+# which measurement disproved. At 15 this alarms on ordinary scheduler jitter,
+# and an alert that cries wolf gets muted, which is worse than no alert.
+# Detection is slower, but gap_warning below is the PRECISE data-loss signal
+# and it is unaffected by this threshold.
+STALL_MIN = 60
 GAP_WINDOW_H = 6
 GAP_MIN_BURST = 3
 NON200_MAX_24H = 3

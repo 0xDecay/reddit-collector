@@ -30,7 +30,7 @@ jobs:
   collect:
     needs: setup
     runs-on: ubuntu-latest
-    timeout-minutes: 5  # Each job polls 2 feeds with 60s sleep each; ~90s total
+    timeout-minutes: 35  # 25 min of polling plus setup/upload headroom
     strategy:
       matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
       fail-fast: false  # Let all jobs complete even if one fails
@@ -38,11 +38,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Collect subreddit ${{ matrix.subreddit }}
-        run: python3 collect.py --sub "${{ matrix.subreddit }}"
-        # This job polls r/${{ matrix.subreddit }}/new.rss and /comments.rss.
-        # Each request sleeps 60s (Reddit's per-IP rate limit is ~1 req/min).
-        # Total runtime per job: ~90 seconds.
+      - name: Poll r/${{ matrix.subreddit }} continuously
+        run: |
+          set -euo pipefail
+          # GitHub's cron is best-effort, NOT every 5 minutes. Measured on
+          # 2026-08-22 in a clean window: scheduled runs 23.2 min apart
+          # (15:59:41 -> 16:22:55) while each run took only 1m28s. Reddit RSS
+          # returns just the ~25 newest items and r/SaaS comments recycles that
+          # window in ~16 min, so relying on the scheduler's frequency loses data.
+          #
+          # So each run polls for longer than the worst observed scheduler gap
+          # instead. Combined with the concurrency group, a new run starts
+          # whenever GitHub does fire and no run is active, giving near
+          # continuous coverage that does not depend on cron punctuality.
+          END=$(( $(date +%s) + RUN_MINUTES * 60 ))
+          cycles=0
+          while [ "$(date +%s)" -lt "$END" ]; do
+            cycles=$((cycles + 1))
+            python3 collect.py --sub "${{ matrix.subreddit }}"
+            # collect.py skips the sleep before its FIRST request, so without this
+            # the first request of the next process could land seconds after the
+            # last of this one and trip the ~1 req/min per-IP limit.
+            [ "$(date +%s)" -lt "$END" ] && sleep 60 || true
+          done
+          echo "completed $cycles poll cycles for r/${{ matrix.subreddit }}"
+        env:
+          RUN_MINUTES: 25
 
       - name: Upload artifacts
         if: always()  # Upload even if collection failed
