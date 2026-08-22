@@ -27,8 +27,45 @@ Summarize for Telegram:
 - Per-subreddit volume, key signals, sentiment shifts, new participant cohorts
 - Anything you could NOT conclude (data gaps, contradictions)
 - Status glyph: 🟢 healthy, 🟡 thin, 🔴 needs action
-- Format exactly as shown below (phone-friendly, 35 char max per line)
-- If there is genuinely nothing new to report, respond with exactly `[SILENT]`
+
+**Format — copy this shape exactly.** It is read on a phone, so every line must
+fit in **35 rendered columns**. An emoji counts as **2 columns**, not 1. Plain
+text only: no `*`, no `_`, no backticks, no `|` tables — the sender does not use
+a parse mode, so markdown characters appear literally and a table becomes an
+unreadable wall. Wrap prose yourself; do not rely on the client to wrap it.
+
+```
+Reddit Scout · Fri 22 Aug
+
+🟢 r/SaaS  428 items
+  Pricing anxiety up sharply.
+  Founders comparing Stripe
+  fees after the rate change.
+  reddit.com/r/SaaS/comments/x
+
+🟡 r/Agency  61 items
+  Thin. Retainer churn talk
+  continues, nothing new.
+
+🔴 r/smallbusiness  0 items
+  3 gap warnings - items were
+  lost, collector may be down.
+
+Couldn't call:
+  sweatystartup volume too low
+  to read a trend either way.
+```
+
+Rules for the body text:
+- One card per subreddit, always in the same order: SaaS, Agency, sweatystartup, smallbusiness.
+- Two-space indent under each header. Blank line between cards.
+- The `Couldn't call:` block is **required** whenever something was unconcludable — a data gap, a contradiction, or thin volume. Omit the block only when there is genuinely nothing you failed to conclude. Never quietly drop an uncertainty to make the digest look cleaner.
+- Include a permalink only when one specific thread is the evidence for the claim above it. Never invent one.
+- Never state a score, upvote count, or comment count. Reddit RSS does not carry them, so any such number would be fabricated.
+
+If there is genuinely nothing new to report across every subreddit, write **no
+outbox file at all** (see step 4). Do not write a file containing `[SILENT]` —
+that string would be delivered to the phone verbatim.
 
 Keep the message under 900 characters.
 

@@ -1,0 +1,30 @@
+Reddit Scout · Sat 22 Aug
+
+🟢 r/SaaS  1086 items
+  Distribution anxiety leads:
+  cold email legality, hunting
+  first paying users, low
+  traffic on new launches.
+
+🟡 r/Agency  82 items
+  Client knowledge handoff and
+  LinkedIn outbound. Volume is
+  thin and automod noise heavy.
+
+🟢 r/smallbusiness  1075 items
+  Quoting, ghosted inquiries,
+  freight damage claims.
+
+🔴 r/sweatystartup  18 items
+  Comments only, zero posts in
+  24h. Too thin to synthesize.
+
+Couldn't call:
+  Agency + smallbusiness term
+  counts are polluted by automod
+  boilerplate. Needs a filter
+  before those reads are usable.
+
+0 gap warnings / 1142 polls.
+First digest from the new
+GitHub + cloud pipeline.

@@ -133,12 +133,17 @@ def main():
         print("No news; sending nothing.")
         sys.exit(0)
 
-    # Get token (never print it)
-    try:
-        token = get_telegram_token()
-    except RuntimeError as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
+    # Get token (never print it).
+    # ponytail: a dry run must not need a credential -- otherwise the safe way to
+    # check formatting is unavailable exactly where you most want it: CI, a fresh
+    # cloud sandbox, anywhere op is not configured.
+    token = None
+    if not dry_run:
+        try:
+            token = get_telegram_token()
+        except RuntimeError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
 
     # Split and send
     parts = split_message(digest)
@@ -147,14 +152,14 @@ def main():
         try:
             success = send_telegram_message(token, part, TELEGRAM_THREAD_ID, dry_run)
             if success:
-                print(f"Sent part {i+1}/{len(parts)}")
+                print(f"{'[DRY RUN] would send' if dry_run else 'Sent'} part {i+1}/{len(parts)}")
             else:
                 raise RuntimeError("Telegram response not ok")
         except Exception as e:
             print(f"Failed to send part {i+1}: {e}", file=sys.stderr)
             sys.exit(1)
 
-    print("Delivery confirmed.")
+    print("[DRY RUN] nothing was sent." if dry_run else "Delivery confirmed by Telegram.")
 
 
 def selftest():
