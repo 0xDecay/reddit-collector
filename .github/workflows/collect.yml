@@ -61,102 +61,52 @@ jobs:
     concurrency:
       group: merge-commit
       cancel-in-progress: false
-    timeout-minutes: 10  # Artifact download + merge + git ops
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Full history for rebase
 
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts/
 
-      - name: Merge and deduplicate JSONL files
+      - name: Merge artifacts and push
         run: |
-          set -e
-          mkdir -p data/
-
-          # Load baseline items.jsonl from git (all existing items at checkout).
-          # Use a temp file to avoid pipe/broken pipe errors with large data.
-          > /tmp/baseline_perms.txt
-          if [ -f data/items.jsonl ]; then
-            jq -r '.permalink // empty' data/items.jsonl 2>/dev/null | sort -u > /tmp/baseline_perms.txt
-          fi
-
-          # Merge items.jsonl: append baseline + new items from artifacts (deduplicated).
-          > data/items.jsonl.tmp
-          if [ -f data/items.jsonl ]; then
-            cat data/items.jsonl >> data/items.jsonl.tmp
-          fi
-
-          for artifact_dir in artifacts/data-*/; do
-            [ -f "$artifact_dir/items.jsonl" ] || continue
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              permalink=$(echo "$line" | jq -r '.permalink // empty' 2>/dev/null)
-              [ -n "$permalink" ] || continue
-              # Only append if permalink is not in baseline
-              grep -Fxq "$permalink" /tmp/baseline_perms.txt 2>/dev/null && continue
-              echo "$line" >> data/items.jsonl.tmp
-            done < "$artifact_dir/items.jsonl"
-          done
-
-          # Merge polls.jsonl: concatenate all poll records.
-          > data/polls.jsonl.tmp
-          [ -f data/polls.jsonl ] && cat data/polls.jsonl >> data/polls.jsonl.tmp
-          for artifact_dir in artifacts/data-*/; do
-            [ -f "$artifact_dir/polls.jsonl" ] && cat "$artifact_dir/polls.jsonl" >> data/polls.jsonl.tmp
-          done
-
-          # Replace originals if we have new data
-          if [ -s data/items.jsonl.tmp ] || [ -s data/polls.jsonl.tmp ]; then
-            mv data/items.jsonl.tmp data/items.jsonl
-            mv data/polls.jsonl.tmp data/polls.jsonl
-            echo "Merged artifacts successfully"
-          else
-            echo "No data to merge; retaining existing files"
-            rm -f data/items.jsonl.tmp data/polls.jsonl.tmp
-          fi
-
-      - name: Commit and push merged data
-        run: |
-          set -e
+          set -euo pipefail
           git config user.name "reddit-collector"
           git config user.email "action@github.local"
 
-          # Pull BEFORE committing to ensure we have latest main.
-          # Use --ff-only to ensure we don't need to resolve conflicts
-          # (fast-forward only, no merge commits or rebases).
-          git pull --ff-only || {
-            echo "Pull failed (likely due to concurrent writes). Retrying..."
-            git fetch origin
-            git rebase origin/main || {
-              git rebase --abort
-              echo "ERROR: Could not rebase. Manual intervention needed."
-              exit 1
-            }
-          }
+          # NEVER rebase these files. items.jsonl and polls.jsonl are append-only,
+          # so two runs always append at the same place and `git pull --rebase`
+          # conflicts every single time -- which then leaves a conflicted tree and
+          # makes every retry fail identically. That took the collector down for
+          # ~40 minutes on 2026-08-22.
+          #
+          # Instead, each attempt resets to the newest remote and re-merges the
+          # artifacts on top. merge_jsonl.py dedupes items by permalink and its
+          # selftest asserts re-merging is idempotent, so a retry cannot double
+          # rows. A conflict is structurally impossible because we never ask git
+          # to reconcile two versions of the file.
+          for attempt in 1 2 3 4 5; do
+            git fetch -q origin main
+            git reset -q --hard origin/main
 
-          # Stage and commit.
-          git add -A data/
-          if git diff --staged --quiet; then
-            echo "No new data. Skipping commit."
-            exit 0
-          fi
+            python3 merge_jsonl.py --artifacts artifacts/ --data data/
 
-          git commit -m "collect: append new posts and comments from all subreddits"
-
-          # Push with retry.
-          for attempt in 1 2 3; do
-            if git push; then
-              echo "Push succeeded"
+            git add -A data/
+            if git diff --staged --quiet; then
+              echo "No new data. Nothing to commit."
               exit 0
             fi
-            echo "Push attempt $attempt failed. Retrying..."
-            sleep 5
-            git pull --ff-only || git rebase origin/main
+
+            git commit -qm "collect: append new posts and comments"
+            if git push -q origin HEAD:main 2>/dev/null; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push attempt $attempt lost the race, re-merging against new remote..."
+            sleep $((attempt * 3))
           done
-          echo "ERROR: Could not push after 3 attempts"
+          echo "ERROR: could not push after 5 attempts" >&2
           exit 1
