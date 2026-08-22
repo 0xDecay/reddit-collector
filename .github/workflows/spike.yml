@@ -4,7 +4,7 @@ name: reddit-spike
 # 10-minute schedule actually hold? Writes one line per run to spike.log.
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 concurrency:
