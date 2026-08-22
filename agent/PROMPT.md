@@ -10,6 +10,21 @@ Read `agent/SOUL.md` in full first. It is your binding brief and the single sour
 Run `python3 load_db.py --out data/reddit.db` to rebuild the database from `data/items.jsonl` and `data/polls.jsonl`. (The flag is `--out`, not `--db`.) Also run `git pull --rebase` first so you synthesise against the newest collected data.
 
 ### 2. Synthesize profiles
+**Trial subreddits — r/marketingagency and r/DigitalMarketing — are COLLECTION ONLY.** Do not
+create or edit profile files for them and do not synthesise them. Instead add one short block at
+the end of the digest, before the `Couldn't call:` block:
+
+```
+Trial (intent test):
+  marketingagency 41 items
+  DigitalMarketing 33 items
+  6 look like real hiring posts
+```
+Count something as a hiring post only when someone is asking to hire or buy — "looking to hire",
+"need someone to", "can anyone recommend an agency". Do NOT count "willing to pay" used in a
+pricing opinion, or someone advertising their own services; that phrase was 21 of 26 false matches
+in the baseline measurement. If you are unsure, do not count it and say the count is conservative.
+
 For each of **SaaS, Agency, sweatystartup, smallbusiness**:
 - Read `data/reddit.db` with Python. Check:
   - Item counts by subreddit and kind (post/comment)
