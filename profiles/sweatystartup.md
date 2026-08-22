@@ -167,6 +167,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 87 items, 64 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
 - **2026-08-22**: 6 new items added (sampled: /u/the-small-crown on I have 0…, /u/AmbitiousAgent-21 on Carpet…)
 - **2026-08-22**: 18 new items added (sampled: /u/andrewtimberlake on Text vs…, /u/andrewtimberlake on Carpet …)
 - **2026-08-22**: Data grew from 64 to 83 items. Still thin — no synthesis changes. Dominant verticals unchanged (cleaning, carpet cleaning, window cleaning, poop scooping). "ATM business" post is a new vertical but a single data point. Text-vs-email and accounting-system-pain threads reinforce existing patterns. No gap warnings. Volume remains ~4 items/day — the lowest of any tracked subreddit.

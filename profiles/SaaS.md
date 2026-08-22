@@ -172,6 +172,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 3284 items, 1466 authors (+10 items vs. this morning's 14:38 UTC snapshot). No new gap warnings since last pass. No material change — all five sections hold.
 - **2026-08-22**: 285 new items added (sampled: /u/carlosgreve on Launched 2 w…, /u/ron141592 on Crossed 400 us…)
 - **2026-08-22**: 1101 new items added (sampled: /u/Worldly-Sprinkles-76 on jus…, /u/That-Plankton-4057 on Day 0…)
 - **2026-08-22**: Synthesis holds across all sections. New signal: "outbid-clone" economy — outbid.lol reportedly made $100K in 48h selling plain-text links, spawning at least 4 visible clones within 24h. AI agent API cost anxiety surfacing ("crushed by API costs because of agent context bloat"). "Vibe coding" debate intensifying — multiple threads on building SaaS with no coding experience. The "built it in a weekend" flex is now drawing pushback as buyers screen for quality. Four SaaS comment-feed gaps on Aug 20 (items_seen=new=25 each poll — collector feed window advanced past position; recovered same day).

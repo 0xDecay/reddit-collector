@@ -164,6 +164,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 1942 items, 1116 authors (+15 comments vs. this morning's 14:38 UTC snapshot). No new gap warnings (the Aug 21 14:38 UTC gap was already logged and recovered). No material change — all five sections hold.
 - **2026-08-22**: 210 new items added (sampled: Ghosted After Inquiry…, /u/Warm-Read8901 on Appointmen…)
 - **2026-08-22**: 1222 new items added (sampled: /u/Emkxyy on Clients that chan…, /u/akl773 on What's one proces…)
 - **2026-08-22**: Synthesis holds across all sections. "Clients editing quotes" pain continues as the most recurring operational thread — 248 trigram matches and still generating new posts daily. "Raising prices brought better clients" confirmed as a recurring discovery. Paperwork/operations burden remains dominant. New aphorism: "clients who fight hardest on price fight on everything else." One comment-feed gap on Aug 21 (14:38 UTC, 25 items likely lost — feed window advanced past collector; recovered next poll).

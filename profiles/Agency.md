@@ -176,6 +176,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 239 items, 110 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
 - **2026-08-22**: 17 new items added (sampled: Agency owners: where does your…, /u/super-chalupa-975 on I am a…)
 - **2026-08-22**: 81 new items added (sampled: /u/ragingcooki3 on Case Studie…, /u/Traditional_Jello436 on I a…)
 - **2026-08-22**: Data grew to 235 items (79 new in 24h — strongest relative growth of any tracked subreddit). Synthesis holds. New signal: agency acquisition thread ("I am about to close a deal on buying my agency") with substantive comment thread — too early to call a pattern but worth watching. "What even is Ops anyway?" and "Appointment Qualification Criteria" posts suggest growing operational maturity discourse. No gap warnings in Agency feed.
