@@ -129,25 +129,62 @@ jobs:
           git config user.name "reddit-collector"
           git config user.email "action@github.local"
 
-          # Stage FIRST, then check. `git diff` alone does not see untracked
-          # files, so on the very first run (when data/*.jsonl are brand new)
-          # it would report "no changes" and silently drop the run's data.
+          # Pull BEFORE committing to get the latest main state.
+          # This ensures we're deduplicating against the current remote data,
+          # not just the checkout state. If a concurrent run pushed data while
+          # we were collecting, we'll have it in mind when deduplicating.
+          git pull --ff-only
+
+          # Now re-deduplicate the merged data against the updated main.
+          # Load baseline items.jsonl from git (all existing items now).
+          > data/items.jsonl.tmp
+          if [ -f data/items.jsonl ]; then
+            baseline_permalinks=$(jq -r '.permalink // empty' data/items.jsonl 2>/dev/null | sort -u)
+            cat data/items.jsonl >> data/items.jsonl.tmp
+          fi
+
+          # Merge items.jsonl: extract only NEW items from artifacts (not in baseline).
+          for artifact_dir in artifacts/data-*/; do
+            if [ -f "$artifact_dir/items.jsonl" ]; then
+              while IFS= read -r line; do
+                if [ -z "$line" ]; then continue; fi
+                permalink=$(echo "$line" | jq -r '.permalink // empty' 2>/dev/null)
+                if [ -z "$permalink" ]; then continue; fi
+                if ! echo "$baseline_permalinks" | grep -Fxq "$permalink"; then
+                  echo "$line" >> data/items.jsonl.tmp
+                fi
+              done < "$artifact_dir/items.jsonl"
+            fi
+          done
+
+          # Merge polls.jsonl: concatenate all poll records.
+          > data/polls.jsonl.tmp
+          cat data/polls.jsonl >> data/polls.jsonl.tmp 2>/dev/null || true
+          for artifact_dir in artifacts/data-*/; do
+            if [ -f "$artifact_dir/polls.jsonl" ]; then
+              cat "$artifact_dir/polls.jsonl" >> data/polls.jsonl.tmp
+            fi
+          done
+
+          # Replace originals only if we have new data
+          if [ -s data/items.jsonl.tmp ] || [ -s data/polls.jsonl.tmp ]; then
+            mv data/items.jsonl.tmp data/items.jsonl
+            mv data/polls.jsonl.tmp data/polls.jsonl
+            echo "Merged artifacts into data/items.jsonl and data/polls.jsonl"
+          else
+            echo "No data to merge; cleaning up"
+            rm -f data/items.jsonl.tmp data/polls.jsonl.tmp
+            exit 0
+          fi
+
+          # Stage and commit.
           git add -A data/
           if git diff --staged --quiet; then
-            echo "No new data. Skipping commit."
+            echo "No new data after deduplication. Skipping commit."
             exit 0
           fi
 
           git commit -m "collect: append new posts and comments from all subreddits"
 
-          # Handle concurrent pushes: pull and rebase before pushing.
-          # Since data/*.jsonl files are append-only, git rebase merges cleanly
-          # even when two concurrent runs have appended to the same file.
-          # If a real conflict occurs, fail loudly for investigation.
-          for attempt in 1 2 3; do
-            git pull --rebase --autostash && git push && exit 0
-            echo "push attempt $attempt failed, retrying..."
-            sleep 5
-          done
-          echo "ERROR: could not push after 3 attempts" >&2
-          exit 1
+          # Push (should succeed after pull --ff-only above).
+          git push
