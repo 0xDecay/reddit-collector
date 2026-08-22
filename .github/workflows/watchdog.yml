@@ -4,6 +4,7 @@ on:
   schedule:
     # Hourly, on the hour (UTC)
     - cron: '0 * * * *'
+  workflow_dispatch:  # so the alerting path can be tested on demand
 
 permissions: {}  # Watchdog doesn't need write access; it only sends alerts
 
