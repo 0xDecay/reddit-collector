@@ -1,0 +1,76 @@
+name: Collect Reddit data
+
+on:
+  schedule:
+    # Every 5 minutes. Reddit's RSS feed window contains ~25 items and recycles
+    # every ~16 minutes. By fetching every 5 minutes, we catch new posts even if
+    # GitHub delays a run by 10 minutes.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # Allow manual triggering for testing
+
+# Concurrency ensures only one collection run executes at a time.
+# This prevents overlapping Reddit API calls, which would hit rate limits (429 errors).
+#
+# Why cancel-in-progress: false?
+# - Each collection takes ~8 minutes (8 feeds × 60-second mandatory sleeps).
+# - The schedule fires every 5 minutes.
+# - When the schedule fires while a collection is still running, the new run waits
+#   in the queue (not cancelled) instead of being discarded.
+# - When the current collection finishes, the queued collection starts immediately.
+# - This ensures we always have a fetch in flight or starting, maximizing coverage
+#   with no gaps. It's deliberate, not a bug.
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+permissions:
+  contents: write  # Allows committing and pushing data files
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15  # Generous timeout: ~8 minutes for fetching + buffer for git ops
+
+    steps:
+      - uses: actions/checkout@v4  # Check out the repo
+
+      - name: Run Reddit collector
+        run: python3 collect.py --subs-file subreddits.txt
+        # Python 3 is built into the runner; no additional setup needed.
+        # collect.py fetches 8 Reddit feeds, appending new posts and comments
+        # to data/items.jsonl and data/polls.jsonl.
+        # The mandatory 60-second sleeps between feeds prevent Reddit rate-limit errors.
+
+      - name: Commit and push data files
+        run: |
+          set -e  # Exit immediately on any error
+          git config user.name "reddit-collector"
+          git config user.email "action@github.local"
+
+          # Stage FIRST, then check. `git diff` alone does not see untracked
+          # files, so on the very first run (when data/*.jsonl are brand new)
+          # it would report "no changes" and silently drop the run's data.
+          git add -A data/
+          if git diff --staged --quiet; then
+            echo "No new data. Skipping commit."
+            exit 0
+          fi
+
+          git commit -m "collect: append new posts and comments"
+
+          # Handle concurrent pushes: pull and rebase before pushing.
+          # Since data/*.jsonl files are append-only, git rebase merges cleanly
+          # even when two concurrent runs have appended to the same file.
+          # If a real conflict occurs (both runs fetched different data at the same
+          # line range), the rebase fails, this job fails, and the next scheduled
+          # run retries—which correctly alerts us to investigate.
+          # Retry the pull/push cycle: several runs can finish close together.
+          # The data files are append-only, so a rebase replays our appended lines
+          # on top of theirs cleanly. If it genuinely conflicts, fail loudly.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push attempt $attempt failed, retrying..."
+            sleep 5
+          done
+          echo "ERROR: could not push after 3 attempts" >&2
+          exit 1

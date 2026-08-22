@@ -1,0 +1,96 @@
+# Reddit Scout — Daily Synthesis Prompt
+
+Read `agent/SOUL.md` in full first. It is your binding brief and the single source of truth. Do not proceed without reading it.
+
+---
+
+## Today's Pass
+
+### 1. Rebuild the SQLite database
+Run `python3 load_db.py --db data/reddit.db` to rebuild the database from `data/items.jsonl` and `data/polls.jsonl`. This ensures the synthesis reads the latest collected data.
+
+### 2. Synthesize profiles
+For each of **SaaS, Agency, sweatystartup, smallbusiness**:
+- Read `data/reddit.db` with Python. Check:
+  - Item counts by subreddit and kind (post/comment)
+  - Any `gap_warning` rows in the polls table from the last 24h (a gap means items were lost; report it)
+- Update `profiles/<subreddit>.md`:
+  - Fill ONLY the five synthesis blocks (demographics, psychographics, what_they_tried, mod_rules, tone)
+  - Change a section ONLY when new data contradicts or extends it—no churn
+  - Append one dated changelog line: `- [YYYY-MM-DD] <what>: <why>`
+  - Never touch the machine-generated sections (n-grams, quotes, histograms, author counts, volume trend)
+
+**Thin data rule:** If a subreddit has under ~50 items total, output "not enough data yet" and do not synthesize from noise.
+
+### 3. Produce the morning digest
+Summarize for Telegram:
+- Per-subreddit volume, key signals, sentiment shifts, new participant cohorts
+- Anything you could NOT conclude (data gaps, contradictions)
+- Status glyph: 🟢 healthy, 🟡 thin, 🔴 needs action
+- Format exactly as shown below (phone-friendly, 35 char max per line)
+- If there is genuinely nothing new to report, respond with exactly `[SILENT]`
+
+Keep the message under 900 characters.
+
+### 4. Send to Telegram
+Run `python3 send_telegram.py < digest.txt` (or use stdin) to send the digest to Telegram. The script reads from stdin, validates Telegram's response, and fails loudly if delivery doesn't confirm. Never silently drop work.
+
+### 5. Commit and push
+```bash
+git add profiles/
+git commit -m "synthesis: update profiles [YYYY-MM-DD]"
+git push origin main
+```
+If the push fails, exit with error code 1 and output the error message. Loud failure is the only safe choice.
+
+---
+
+## Digest Format
+
+Read on a phone, proportional font, ~35 usable columns.
+
+**Shape:**
+```
+Reddit digest - [DATE]
+
+green-circle r/SaaS
+   [volume] new · [key signal]
+   [detail]
+
+yellow-circle r/Agency
+   [volume] new
+   [warning or thin-data note]
+
+[blank line]
+
+Signals
+   [emerging theme]
+   [detail]
+
+Could not conclude
+   [gap or ambiguity]
+   [why]
+```
+
+**Rules:**
+- Every line ≤35 characters
+- NO tables, NO pipes `|`, NO space-padded alignment
+- One stanza per subreddit, blank lines between
+- Status glyph first (🟢 🟡 🔴), then subreddit name
+- Detail lines indented 3 spaces
+- Use `·` to separate values, never `|` or `-`
+- NO permalinks or shell commands (too long)
+- NO markdown, NO HTML, NO backticks
+- Plain text + emoji only
+
+**If nothing new:** respond with exactly `[SILENT]` (no digest, no send).
+
+---
+
+## Hard Constraints
+
+- Reddit RSS carries NO score, NO upvote count, NO comment count. Never state what "performed well" or what the consensus was. Write exactly: "not derivable from RSS feeds"
+- Quotes must be verbatim strings copied from the db, each with its permalink
+- Read-only. Never contact Reddit.
+- Do not propose reply drafters, post drafters, dashboards or landing pages. Out of scope by design until a week of data proves a signal exists.
+- The marker blocks are load-bearing. If you overwrite them, you destroy the evidence layer (verbatim quotes, n-grams, histograms). Respect the boundaries exactly.

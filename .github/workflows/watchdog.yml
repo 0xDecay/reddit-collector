@@ -1,0 +1,27 @@
+name: Reddit watchdog
+
+on:
+  schedule:
+    # Hourly, on the hour (UTC)
+    - cron: '0 * * * *'
+
+permissions: {}  # Watchdog doesn't need write access; it only sends alerts
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4  # Check out the repo
+
+      - name: Run watchdog
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: python3 reddit-watchdog.py
+        # The Telegram bot token is injected as an environment variable, never visible in logs.
+        # reddit-watchdog.py reads the token from $TELEGRAM_BOT_TOKEN and sends Telegram alerts
+        # if the Reddit collector is unhealthy (e.g., hasn't successfully fetched in 1+ hours).
+        # If the watchdog exits with a non-zero code (e.g., Telegram send failed), this step
+        # fails, and the job fails. GitHub then alerts via email/webhook, making the broken
+        # alerting path itself visible instead of silent.
