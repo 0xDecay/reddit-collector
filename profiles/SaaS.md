@@ -172,6 +172,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Afternoon synthesis pass: 553 new items since the 14:56 UTC pass (3274→3827 items, 1655 authors). All five sections hold — no rewrites. "outbid-clone" signal updated: outbid.lol now reported at $154K revenue (was $100K at last pass) — still a single-thread data point, not upgraded to a pattern claim. New but isolated: an EU AI Act Article 4 compliance-anxiety post (missing training records) — one occurrence, too thin to add as a section claim. Four SaaS comment-feed gap warnings in the last 24h (of 361 comment polls, ~1%), each recovered on the next poll — no evidence of lasting data loss.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 3284 items, 1466 authors (+10 items vs. this morning's 14:38 UTC snapshot). No new gap warnings since last pass. No material change — all five sections hold.
 - **2026-08-22**: 285 new items added (sampled: /u/carlosgreve on Launched 2 w…, /u/ron141592 on Crossed 400 us…)
 - **2026-08-22**: 1101 new items added (sampled: /u/Worldly-Sprinkles-76 on jus…, /u/That-Plankton-4057 on Day 0…)

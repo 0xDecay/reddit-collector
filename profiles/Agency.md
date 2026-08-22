@@ -176,6 +176,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-22**: Afternoon synthesis pass: 45 new items since the 14:56 UTC pass (239→284 items, 124 authors), all comments — no new posts landed in this window. All five sections hold; still thin-data/preliminary. No gap warnings.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 239 items, 110 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
 - **2026-08-22**: 17 new items added (sampled: Agency owners: where does your…, /u/super-chalupa-975 on I am a…)
 - **2026-08-22**: 81 new items added (sampled: /u/ragingcooki3 on Case Studie…, /u/Traditional_Jello436 on I a…)

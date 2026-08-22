@@ -1,0 +1,38 @@
+Reddit Scout · Sat 22 Aug
+
+🟢 r/SaaS  3827 items
+  "outbid" clone economy
+  now at $154K rev, up
+  from $100K last pass.
+  reddit.com/r/SaaS/comments/1vvi6ed/outbidlol_is_at_154k_revenue_how/
+
+🟡 r/Agency  284 items
+  45 new, comments only,
+  no new posts. Thin but
+  steady.
+
+🟡 r/sweatystartup  110 items
+  23 new. One new post,
+  same verticals. Still
+  too thin for a trend.
+
+🟢 r/smallbusiness  2327 items
+  400 new. "Clients editing
+  quotes" pain keeps
+  recurring. Price-raise
+  pattern still holds.
+
+Trial (intent test):
+  marketingagency 66 items
+  DigitalMarketing 111 items
+  7 look like real hiring
+  posts (conservative count)
+
+Couldn't call:
+  SaaS: 4 comment-feed
+  gaps in 24h (~1% of
+  polls); smallbusiness:
+  1 gap + 1 rate-limit.
+  All recovered same-day,
+  no evidence of lasting
+  loss.
