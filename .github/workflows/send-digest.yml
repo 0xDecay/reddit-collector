@@ -1,0 +1,56 @@
+name: Send digest
+
+# The Claude cloud agent cannot hold the Telegram token: the sandbox has no
+# 1Password CLI and no TELEGRAM_BOT_TOKEN. Rather than push a secret into the
+# cloud, the agent writes its digest to outbox/ and this workflow — which
+# already holds the secret — does the sending. The secret never leaves GitHub.
+on:
+  push:
+    paths:
+      - 'outbox/*.txt'
+  workflow_dispatch:
+
+concurrency:
+  group: send-digest
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # to clear the outbox after a confirmed send
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Send any queued digests
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          found=0
+          for f in outbox/*.txt; do
+            found=1
+            echo "sending $f"
+            # send_telegram.py exits non-zero unless Telegram confirms ok:true,
+            # so a failed send fails this job loudly rather than silently.
+            python3 send_telegram.py --file "$f"
+          done
+          if [ "$found" = "0" ]; then echo "outbox empty, nothing to send"; fi
+
+      - name: Clear the outbox (only reached if every send confirmed)
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(outbox/*.txt)
+          if [ ${#files[@]} -eq 0 ]; then echo "nothing to clear"; exit 0; fi
+          git config user.name "reddit-collector"
+          git config user.email "action@github.local"
+          git rm -q "${files[@]}"
+          git commit -qm "digest sent, clearing outbox"
+          for a in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            sleep 5
+          done
+          exit 1

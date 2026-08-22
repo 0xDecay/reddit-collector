@@ -32,41 +32,39 @@ Summarize for Telegram:
 
 Keep the message under 900 characters.
 
-### 4. Send to Telegram
+### 4. Queue the digest for sending
 
-First get the bot token. Try these in order and say in your output which one worked:
-```bash
-# a) already in the environment?
-echo "${TELEGRAM_BOT_TOKEN:+present}"
-# b) 1Password service account
-op read "op://Agents2/frasier-env/TELEGRAM_BOT_TOKEN"
-```
-Then send:
-```bash
-python3 send_telegram.py < digest.txt
-```
-`send_telegram.py` validates Telegram's `ok: true` and exits non-zero with the API error if delivery is not confirmed. **Never treat "the script ran" as proof it delivered** — a silent delivery failure once cost a full day's digest. Report the message_id it returns.
+**You do not send the message yourself, and you do not need any Telegram credential.**
+This sandbox has no `op` and no `TELEGRAM_BOT_TOKEN` (verified 2026-08-22). A GitHub
+Actions workflow holds the secret and does the sending, so no credential ever enters
+this environment.
 
-**Never print the token value itself.** Report only whether it was found and from where.
+Write the digest to the outbox:
+```bash
+mkdir -p outbox
+cat > "outbox/digest-$(date -u +%F).txt" <<'DIGEST'
+<your digest text here, exactly as it should appear in Telegram>
+DIGEST
+```
+If there is genuinely nothing new, write **nothing** to outbox/ — an absent file is
+how "no news" is expressed. Do not write a file containing `[SILENT]`.
 
 ### 5. Commit and push
-The repo is public so cloning needs no credential, but pushing does. Get the token:
+Pushing works with the ambient git credentials already in this sandbox — no token
+needed. The container has been on `main` (not detached HEAD), but use the explicit
+refspec anyway:
 ```bash
-op read "op://Agents2/fyrq42zp3gmxd3depgawbbkk2e/credential"
-```
-That is a fine-grained PAT scoped to this repo only. Use it without printing it:
-```bash
-git add profiles/ data/
+git add profiles/ outbox/
 git -c user.name="reddit-scout" -c user.email="agent@local" \
     commit -m "synthesis: update profiles $(date -u +%F)"
-git push "https://x-access-token:$PAT@github.com/0xDecay/reddit-collector.git" HEAD:main
+git push origin HEAD:main
 ```
-Note this container may start in DETACHED HEAD — that is why the refspec is `HEAD:main`.
-
-If the push fails, exit non-zero and print the error. Loud failure is the only safe choice.
+Pushing a file into `outbox/` triggers the send-digest workflow, which sends it and
+then clears the outbox. **If the push fails, exit non-zero and print the error** —
+a dropped push means the digest is never sent.
 
 ### 6. Report what the environment actually had
-End your run by stating plainly: was `op` available? did the Telegram send confirm with a message_id? did the push land? If any credential was missing, say exactly which — that is the most useful thing you can tell me.
+End your run by stating plainly: did the push land on origin/main, and did you write a digest file to `outbox/` (or deliberately write none because there was no news)? If the push failed, say so loudly — that is the one failure that silently costs a day's digest.
 
 ---
 
