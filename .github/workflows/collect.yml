@@ -2,20 +2,31 @@ name: Collect Reddit data
 
 on:
   schedule:
-    # Every 5 minutes. Reddit's RSS feed window contains ~25 items and recycles
-    # every ~16 minutes. By fetching every 5 minutes with parallel subreddit jobs,
-    # we catch new posts without hitting per-IP rate limits.
+    # This asks GitHub to fire every 5 minutes; GitHub does NOT promise to.
+    # Measured 2026-08-22 in a clean window: consecutive scheduled runs 23.2 min
+    # apart while each run took 1m28s. The frequent cron is only there to create
+    # OPPORTUNITIES to start; actual coverage comes from each run polling for 25
+    # minutes (see the collect job), which is why punctuality no longer matters.
     - cron: '*/5 * * * *'
   workflow_dispatch:  # Allow manual triggering for testing
+
+# One run at a time. Without this, a 25-minute run plus a 5-minute cron means up
+# to 5 overlapping runs x 6 subreddits = 30 concurrent jobs, which exceeds the
+# free-tier concurrent-job limit and makes jobs QUEUE -- delaying the very polls
+# this design exists to keep dense. cancel-in-progress must stay false: killing a
+# run mid-poll would throw away the data it has collected but not yet uploaded.
+concurrency:
+  group: collect
+  cancel-in-progress: false
 
 permissions:
   contents: write  # Allows committing and pushing data files
 
 jobs:
   # Dynamic matrix: read subreddits.txt to generate one job per subreddit.
-  # Each job polls its subreddit's 2 RSS feeds (~90s per job) in parallel.
-  # Because each job gets its own runner IP, per-IP rate limits do NOT apply
-  # across jobs; they apply only within each job's 2 sequential requests.
+  # Each job gets its own runner IP, so Reddit's ~1 request/minute per-IP limit
+  # applies only WITHIN a job, never across them. That is what lets every
+  # subreddit be polled at the same time instead of 60s apart in one process.
   setup:
     runs-on: ubuntu-latest
     outputs:
