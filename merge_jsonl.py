@@ -7,10 +7,16 @@ produces several partial JSONL files that must be folded into the committed
 ones. Replaces a bash loop that spawned a `jq` process per line (minutes on a
 few thousand rows; this is a single pass).
 
-Items dedupe by permalink, which is their primary key in schema.sql. Polls are
-event records with no natural key and are simply appended -- the caller re-runs
-this against a clean checkout on every push attempt, so a retry cannot double
-them.
+Every artifact contains the WHOLE file, not just that job's new rows, because
+each collect job checks out the repo and collect.py appends to the committed
+data. So both streams MUST be deduped or a 4-job run multiplies the file by 4.
+That is exactly what happened on 2026-08-22: polls went 2,711 -> 13,563 in one
+"successful" run.
+
+Items dedupe by permalink (their primary key in schema.sql). Polls dedupe by
+(subreddit, kind, polled_at); polled_at is microsecond-precision, so the triple
+is unique per poll. Deduping both is also what makes the caller's push-retry
+loop safe to re-run.
 
   python3 merge_jsonl.py --artifacts artifacts/ --data data/
   python3 merge_jsonl.py --selftest
@@ -44,10 +50,15 @@ def write_jsonl(path, rows):
     os.replace(tmp, path)  # atomic: never leave a half-written data file
 
 
+def poll_key(p):
+    return (p.get("subreddit"), p.get("kind"), p.get("polled_at"))
+
+
 def merge(artifacts_dir, data_dir):
     items = read_jsonl(os.path.join(data_dir, "items.jsonl"))
     polls = read_jsonl(os.path.join(data_dir, "polls.jsonl"))
     seen = {it.get("permalink") for it in items}
+    seen_polls = {poll_key(p) for p in polls}
 
     added_i = added_p = 0
     for d in sorted(glob.glob(os.path.join(artifacts_dir, "*"))):
@@ -58,9 +69,13 @@ def merge(artifacts_dir, data_dir):
             seen.add(p)
             items.append(it)
             added_i += 1
-        new_polls = read_jsonl(os.path.join(d, "polls.jsonl"))
-        polls.extend(new_polls)
-        added_p += len(new_polls)
+        for pl in read_jsonl(os.path.join(d, "polls.jsonl")):
+            k = poll_key(pl)
+            if k in seen_polls:
+                continue
+            seen_polls.add(k)
+            polls.append(pl)
+            added_p += 1
 
     os.makedirs(data_dir, exist_ok=True)
     write_jsonl(os.path.join(data_dir, "items.jsonl"), items)
@@ -85,12 +100,26 @@ def _selftest():
         assert ai == 1, f"expected 1 new item, got {ai}"
         assert len(read_jsonl(os.path.join(data, "items.jsonl"))) == 2
         print("  ok: dedupes items by permalink, appends the new one")
+        assert ap == 0, f"identical poll should have deduped, got +{ap}"
+        assert len(read_jsonl(os.path.join(data, "polls.jsonl"))) == 1
+        print("  ok: dedupes polls by (subreddit, kind, polled_at)")
 
-        # Re-merging the SAME artifacts must add no items. This is the property the
+        # Re-merging the SAME artifacts must add nothing. This is the property the
         # push-retry loop depends on -- without it a retry would duplicate rows.
-        ai2, _ = merge(art, data)
-        assert ai2 == 0, f"re-merge added {ai2} items, must be 0"
-        print("  ok: re-merge is idempotent for items")
+        ai2, ap2 = merge(art, data)
+        assert (ai2, ap2) == (0, 0), f"re-merge added {ai2} items / {ap2} polls, must be 0"
+        print("  ok: re-merge is idempotent for BOTH streams")
+
+        # The real 2026-08-22 failure: N artifacts each carrying the whole file.
+        for n in ("data-A", "data-B", "data-C"):
+            os.makedirs(os.path.join(art, n), exist_ok=True)
+            write_jsonl(os.path.join(art, n, "polls.jsonl"),
+                        [{"subreddit": "SaaS", "kind": "post", "polled_at": "T1"},
+                         {"subreddit": "SaaS", "kind": "post", "polled_at": "T2"}])
+        merge(art, data)
+        got = len(read_jsonl(os.path.join(data, "polls.jsonl")))
+        assert got == 3, f"3 artifacts x same 2 polls should yield 1+2=3 rows, got {got}"
+        print("  ok: N artifacts carrying the same rows do not multiply the file")
 
         with open(os.path.join(data, "items.jsonl"), "a") as f:
             f.write('{"permalink": "/c", "trunc"\n')
