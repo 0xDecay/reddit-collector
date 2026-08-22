@@ -56,7 +56,7 @@ Reddit Scout · Fri 22 Aug
   Pricing anxiety up sharply.
   Founders comparing Stripe
   fees after the rate change.
-  reddit.com/r/SaaS/comments/x
+  reddit.com/comments/1vvi6ed
 
 🟡 r/Agency  61 items
   Thin. Retainer churn talk
@@ -76,6 +76,7 @@ Rules for the body text:
 - Two-space indent under each header. Blank line between cards.
 - The `Couldn't call:` block is **required** whenever something was unconcludable — a data gap, a contradiction, or thin volume. Omit the block only when there is genuinely nothing you failed to conclude. Never quietly drop an uncertainty to make the digest look cleaner.
 - Include a permalink only when one specific thread is the evidence for the claim above it. Never invent one.
+- **Always shorten it to `reddit.com/comments/<id>`** — take the id out of the full permalink and drop the subreddit and title slug. A full Reddit permalink runs about 70 columns, twice the phone limit, and a URL cannot wrap, so it shreds the layout. The short form is 29 columns and redirects correctly (verified 2026-08-22: `reddit.com/comments/1vvi6ed` → 301). One permalink per digest at most.
 - Never state a score, upvote count, or comment count. Reddit RSS does not carry them, so any such number would be fabricated.
 
 If there is genuinely nothing new to report across every subreddit, write **no
