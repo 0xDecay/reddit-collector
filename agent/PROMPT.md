@@ -88,8 +88,15 @@ how "no news" is expressed. Do not write a file containing `[SILENT]`.
 
 ### 5. Commit and push
 Pushing works with the ambient git credentials already in this sandbox — no token
-needed. The container has been on `main` (not detached HEAD), but use the explicit
-refspec anyway:
+needed.
+
+**The sandbox checks the repo out in DETACHED HEAD state.** Get onto the branch
+first, or your commit will be stranded on no branch and the push will fail:
+```bash
+git checkout main
+git pull --rebase origin main
+```
+Then:
 ```bash
 git add profiles/ outbox/
 git -c user.name="reddit-scout" -c user.email="agent@local" \
