@@ -1,258 +1,297 @@
 # Reddit Collector
 
-Polls Reddit's public RSS feeds into SQLite, detects when the feed window outran us, and turns accumulated data into a living markdown profile per subreddit.
-
-**The profile file is the product** — a document about a few thousand potential buyers, written from what they actually said, that gets sharper every day it runs.
-
-This is the operational runbook. For *why* things are the way they are — why r/Consulting was dropped, why the wake job lives in the default cron store, what the build got wrong — see [HANDOFF.md](HANDOFF.md), a frozen dated record.
+A system that collects Reddit discussions, synthesizes what buyers are saying into daily profiles, and sends a morning summary to Telegram. The profile files are the product — living documents about potential customers, updated daily from what they actually wrote.
 
 ---
 
-## Where it runs
+## How it works
 
-The live system is on the VPS `mootoshi`. **The database in this repo stays empty** — it's a schema template, not the data.
+Four moving parts run the whole system:
 
 ```
-system cron (every 10 min, uid 10000)
-  └─ collect.py ──► /opt/hermes/clean-data/reddit-collector/data/reddit.db
-                          │
-system cron (09:28 ET)    │
-  └─ profile_subs.py ◄────┘
-        └─► profiles/<sub>.md   (machine-generated sections)
-                    │
-Hermes cron (09:30 ET, deepseek-v4-pro)
-  └─ reddit-scout ─► fills the synthesis sections in the same files
-                   └─► daily digest ──► Telegram "reddit rss" topic
+GitHub Actions (every 5 min)
+  └─ Collector polls Reddit RSS
+       └─ appends to data/items.jsonl & data/polls.jsonl
+            └─ commits to git
+
+                    [Next day]
+                    
+Claude Cloud Agent (daily, 9:30 AM UTC)
+  └─ Reads the JSONL via load_db.py
+       └─ Updates profiles/<subreddit>.md (five synthesis sections)
+            └─ Writes digest to outbox/digest-<date>.txt
+                 └─ Commits & pushes to git
+
+GitHub Actions (triggered by outbox/ push)
+  └─ Reads digest, sends to Telegram
+       └─ Clears outbox/ (deletes the file)
 ```
 
-The collector is **outside** Hermes deliberately: it needs no model, no container restart, and keeps a 1-request-per-minute poller off the token budget. Hermes only reads the db.
-
-| Path on mootoshi | What |
-|---|---|
-| `/opt/hermes/clean-data/reddit-collector/` | scripts, **live db**, live profiles (`/opt/data/…` inside the container) |
-| `/opt/hermes/clean-data/profiles/reddit-scout/` | the agent's `SOUL.md` + `config.yaml` |
-| `/opt/hermes/clean-data/scripts/` | `reddit-watchdog.py`, `reddit-icp-weekly.sh` — **note: `$HOME/scripts/`, not the `~/.hermes/scripts/` that `hermes cron create --help` claims** |
-| `/etc/cron.d/reddit-collector` | collector every 10 min, profiler 09:28 ET |
-| `/var/log/reddit-collector.log` | cron output (unbuffered) |
+**The flow in words:**
+- The **Collector** runs every 5 minutes, fetches new posts and comments from Reddit's public RSS feeds for four subreddits (SaaS, Agency, sweatystartup, smallbusiness), and appends them to two append-only JSON files stored in git.
+- The **Cloud Agent** wakes daily at 9:30 AM Eastern, rebuilds an SQLite database from the accumulated JSONL, reads what people actually said, fills in the synthesis sections (demographics, psychographics, tools tried, tone), and writes a concise Telegram digest.
+- The **Digest Sender** workflow watches for new files in `outbox/`, sends them to Telegram, then deletes them. The secret (Telegram bot token) never enters the cloud sandbox — only GitHub Actions holds it.
+- The **Watchdog** runs hourly and sends an alert only when something is broken (collector stalled, too many HTTP errors, digest didn't run, etc.). Silence means healthy.
 
 ---
 
-## Alerting — what tells you to act
+## Something's wrong — what do I check?
 
-You should not have to remember to check this. Three jobs cover it:
+### No digest arrived this morning
 
-| Job | When | Behaviour |
-|---|---|---|
-| `reddit-scout-daily` | 09:30 ET daily | the digest itself |
-| `reddit-watchdog` | hourly at :17 | **silent unless action is needed** |
-| `reddit-icp-weekly` | Thu 09:35 ET | subreddit selection review |
+1. **Did the agent run?** Check the last commit to the repo:
+   ```bash
+   git log --oneline -5
+   ```
+   Look for a recent commit starting with `synthesis:`. If it's more than 26 hours old, the agent either didn't wake or failed to push.
 
-### Message format
+2. **Is there a digest stuck in outbox/?**
+   ```bash
+   git ls-tree -r --name-only HEAD | grep outbox/
+   ```
+   If you see `outbox/digest-<date>.txt`, the agent wrote it but the sender workflow failed. Check Actions:
+   ```bash
+   gh run list --workflow send-digest.yml --limit 5
+   ```
+   Look for the most recent run. If it failed or is "Waiting", click it to see the error.
 
-All three messages are **vertical cards, plain text, ≤35 columns** — Telegram renders a proportional font at roughly 35–40 usable columns on a phone, so tables and space-padded alignment collapse into noise. Rules, if you edit any of these:
+3. **Did the agent encounter a data problem?** Read the last synthesis commit message:
+   ```bash
+   git log --oneline -1 | grep synthesis
+   git show HEAD --stat
+   ```
+   If the profiles weren't updated (no changes to `profiles/`), the agent thought there was no news and wrote nothing to outbox. That's correct — a silent run means no signals worth reporting.
 
-- **No tables, no column alignment.** One stanza per entity, blank line between.
-- **Never emit `|`.** The Hermes Telegram adapter has pipe-table handling that reformats it.
-- **`⚠️` must carry the VS16 selector** — bare `⚠` renders as a text glyph on some Android builds.
-- Status glyphs `🟢` `🟡` `🔴`; `·` to separate values inline.
-- No permalinks or shell commands in a message — too long, cannot wrap. Point at this README instead.
-- No markup needed: Hermes sends `parse_mode=MARKDOWN_V2` and **auto-escapes** for you, retrying as plain text if parsing fails. `·` `─` `█` `░` are not MarkdownV2 specials and pass through untouched.
-- Over 4,096 chars Hermes **splits** into `(1/3)`-marked messages rather than truncating.
+4. **Check the routine setup.** The cloud agent runs via a Claude routine named `reddit-scout-daily`, scheduled at 30 13 * * * UTC (9:30 AM Eastern). To verify it exists and is enabled:
+   ```bash
+   # No direct CLI — this is in Claude's cloud scheduler, not GitHub Actions
+   # If it's truly down, you'll see >26h since last synthesis commit
+   ```
 
-Both scripts assert this mechanically — `--selftest` fails if any emitted line exceeds 35 rendered columns (emoji counted as 2).
+### Digest arrived but looks wrong or unreadable
 
-**The watchdog prints nothing when healthy** — that's the design, so it never becomes noise you learn to ignore. It fires only on:
-
-- **collector stalled** — no poll in 25 min (dead cron or a stale `flock` lock)
-- **sustained gaps** — 3+ in 6h, meaning the interval is genuinely too slow (a lone gap is an activity spike and is *not* actionable at 4 subs)
-- **HTTP error cluster** — >3 non-200s in 24h (429s mean the 60s spacing is being violated)
-- **digest ran but did not deliver** — the exact silent failure that cost a day's digest on 2026-08-20
-- **digest hasn't run in 26h**, or the job was disabled/deleted
-
-Verify the alerting itself still works — a watchdog silent because it's *broken* is worse than none:
-
+Check the raw file that was sent:
 ```bash
-ssh root@mootoshi 'docker exec -u hermes hermes-gateway python3 /opt/data/scripts/reddit-watchdog.py --selftest'
+git log --all --oneline | grep 'digest sent' | head -1
+git show <COMMIT>:outbox/digest-*.txt
 ```
 
-That asserts all 8 paths: silent when healthy, loud on each failure mode.
+Problems to look for:
+- Lines longer than 35 characters (emoji count as 2 chars). The digest was meant for a phone and will wrap badly.
+- Fabricated numbers (score, upvotes, comment counts). RSS feeds don't carry these — if any appear, that's a bug. The agent's SOUL.md forbids it.
+- Quotes that don't match the actual data. Quotes must be verbatim from the SQLite database.
 
-**But a passing selftest is not proof the job works.** Running the script by hand tests the script; it does not test that the scheduler can *find* it. Verify the job itself:
+To fix it: edit `agent/PROMPT.md` step 3 (the digest format template) or `agent/SOUL.md` (the rules), commit, and wait for the next run.
+
+### Watchdog sent an alert
+
+The watchdog runs hourly and stays silent when healthy. An alert means one of these:
+- **Collector stalled** — no successful poll in 15+ minutes. Check recent Actions runs:
+  ```bash
+  gh run list --workflow collect.yml --limit 5 --status completed
+  ```
+  If they show "failure", look at the latest:
+  ```bash
+  gh run view <RUN_ID> --log
+  ```
+- **Too many HTTP 429 errors** — Reddit is rate-limiting. This means the 60-second sleep between requests is being violated. Unlikely unless collect.py was modified.
+- **Too many data gaps in 6 hours** — the RSS window is advancing faster than we poll. This is data loss and means we need fewer subreddits or faster polling (both are hard limits).
+- **Digest ran but didn't deliver** — the agent wrote to outbox but the send-digest workflow didn't fire or failed. See "No digest arrived" above.
+- **Digest hasn't run in 26+ hours** — the routine is disabled or the agent has an unrecoverable error.
+
+### Collector stopped committing data
+
+Check if the Actions workflow is running:
 ```bash
-ssh root@mootoshi 'docker exec -u hermes hermes-gateway hermes cron run <JOB_ID>'
-# then confirm last_status flipped to ok:
-ssh root@mootoshi 'python3 -c "
-import json
-for j in json.load(open(\"/opt/hermes/clean-data/cron/jobs.json\"))[\"jobs\"]:
-    if j[\"name\"].startswith(\"reddit-\"): print(j[\"name\"], j.get(\"last_status\"), j.get(\"last_error\"))
-"'
+gh run list --workflow collect.yml --limit 10
 ```
+
+If runs are failing:
+```bash
+gh run view <RUN_ID> --log
+```
+
+Common issues:
+- **One subreddit's collector failed, but others succeeded.** The merge step is `fail-fast: false`, so a timeout on one subreddit doesn't stop the others. Check which one and why.
+- **Merge step failed.** Check for git conflicts or disk full (unlikely in GitHub Actions). The rebase logic should handle concurrent pushes gracefully.
+- **Permission denied pushing to origin.** The Actions job should have `permissions: contents: write`. Check the workflow file hasn't been edited.
+
+To manually trigger collection now (for testing):
+```bash
+gh workflow run collect.yml
+```
+
+### Digest stuck in outbox/ and never sent
+
+The send-digest workflow triggers on any push to `outbox/`. If a digest file is still there:
+
+1. **Check if the workflow ran:**
+   ```bash
+   gh run list --workflow send-digest.yml --limit 3
+   ```
+
+2. **If the latest run failed,** see what went wrong:
+   ```bash
+   gh run view <RUN_ID> --log
+   ```
+
+3. **Force a retry** — just re-push the file (or make a dummy commit to trigger the workflow):
+   ```bash
+   git commit --allow-empty -m "retry send-digest workflow"
+   git push
+   ```
 
 ---
 
-## Choosing which subreddits to watch
+## Secrets and credentials
 
-Decided by measurement, not by how promising a sub sounds. `icp_probe.py` scores every collected item for ownership language, connectable-stack mentions, spend signals, and *negative* employee/job-seeker signals.
+**Where the secrets live:**
 
-**The rule:**
-- Rank on **qualified items** (absolute), with **qualified %** as the density tiebreak.
-- **Disqualify** any sub where `employee%` exceeds `owner%` **by at least 1.0 percentage point** — that's a career forum, not a buyer pool. The margin exists because a bare `>` fires on rounding noise: r/SaaS hit 4.62 vs 4.55 and got flagged red while both displayed as "4.6%". A tie is not evidence of anything.
+- **TELEGRAM_BOT_TOKEN** — stored in the GitHub repo as a secret (Settings → Secrets and variables → Actions). Used by:
+  - `send-digest.yml` workflow (sends the digest to Telegram)
+  - `watchdog.yml` workflow (sends alerts when healthy = false)
 
-`icp_probe.py --narrow` emits the phone format; the default wide table is for the terminal. `--subs-file` restricts scoring to currently-monitored subs, so dropped ones (whose rows stay as evidence) don't eat lines in the weekly report.
+- **Cloud agent sandbox** — deliberately holds no secrets. It cannot send Telegram messages directly because 1Password CLI and the token are not available in the sandbox. This is by design: the agent writes to `outbox/` and GitHub Actions does the sending. The secret never leaves GitHub.
 
-```bash
-ssh root@mootoshi 'python3 /opt/hermes/clean-data/reddit-collector/icp_probe.py'
-python3 icp_probe.py --selftest     # asserts the probes actually discriminate
-```
+**When to rotate the token:**
 
-The weekly job runs this for you and delivers it. **Pre-data scoring proved unreliable twice** (see HANDOFF) — trust the probe over intuition.
+Only if you have reason to believe it leaked. Two instances leaked into logs during the migration from VPS (2026-08-20 and 2026-08-22) — if you were monitoring the logs, rotate the token immediately:
 
-**Capacity is the hard limit:** each sub costs 2 requests × 60s. With the 60s lead sleep, N feeds take N minutes flat.
+1. Generate a new token from BotFather (Telegram)
+2. Update the repo secret:
+   ```bash
+   gh secret set TELEGRAM_BOT_TOKEN --body <NEW_TOKEN>
+   ```
+3. Test by manually triggering the watchdog:
+   ```bash
+   gh workflow run watchdog.yml --ref main
+   ```
 
-| subs | requests | cycle | vs 10-min tick |
-|---|---|---|---|
-| 3 | 6 | 6 min | comfortable |
-| **4** | **8** | **8 min** (measured 8m02s) | **current — 2 min margin** |
-| 5 | 10 | 10 min | ✗ collides; `flock` silently skips cycles |
-
-Four is the ceiling at this interval. To go wider you'd need to poll `comments.rss` more often than `new.rss` (posts move ~10× slower) — documented, deliberately not built.
-
----
-
-## Operations
-
-**Is it healthy, and what did it collect?**
-```bash
-ssh root@mootoshi 'python3 - <<PY
-import sqlite3
-c = sqlite3.connect("/opt/hermes/clean-data/reddit-collector/data/reddit.db")
-q = lambda s: c.execute(s).fetchall()
-print("ITEMS PER SUB:")
-for r in q("select subreddit,kind,count(*) from items group by 1,2 order by 1,2"): print("  ", r)
-print("LAST 12 POLLS:")
-for r in q("select polled_at,subreddit,kind,http_status,items_seen,items_new,gap_warning from polls order by id desc limit 12"): print("  ", r)
-print("GAP WARNINGS (24h):", q("select count(*) from polls where gap_warning=1 and polled_at > datetime(\"now\",\"-1 day\")")[0][0])
-print("NON-200 POLLS:", q("select http_status,count(*) from polls where http_status is null or http_status!=200 group by 1"))
-PY'
-```
-
-**Read the actual product:**
-```bash
-ssh root@mootoshi 'cat /opt/hermes/clean-data/reddit-collector/profiles/SaaS.md'
-```
-
-**Did the agent wake and synthesise?**
-```bash
-ssh root@mootoshi 'docker exec -u hermes hermes-gateway hermes cron list 2>&1 | grep -A6 reddit-scout-daily'
-```
-
-**Digest didn't arrive?** Check delivery specifically — `last_status: ok` is the *agent's* status, not the delivery's:
-```bash
-ssh root@mootoshi 'python3 - <<PY
-import json
-for j in json.load(open("/opt/hermes/clean-data/cron/jobs.json"))["jobs"]:
-    if j["name"] == "reddit-scout-daily":
-        print("status:", j["last_status"], "| run:", j["last_run_at"])
-        print("error:", j["last_error"])
-        print("delivery_error:", j["last_delivery_error"])
-PY'
-```
-
-**Change which subreddits are collected** — takes effect on the next 10-min tick:
-```bash
-ssh root@mootoshi 'vi /opt/hermes/clean-data/reddit-collector/subreddits.txt'
-```
-Keep the existing capitalisation of any sub already collecting (`Agency`, not `agency`) — rows are keyed by the string as written, so changing case splits the history into two subreddits.
-
-**Force a cycle now** (~8 min). `flock` makes this safe mid-cycle — it exits rather than double-polling:
-```bash
-ssh root@mootoshi 'flock -n /run/reddit-collector.lock setpriv --reuid=10000 --regid=10000 --clear-groups /usr/bin/python3 -u /opt/hermes/clean-data/reddit-collector/collect.py --subs-file /opt/hermes/clean-data/reddit-collector/subreddits.txt'
-```
-
-**Raw cron log:**
-```bash
-ssh root@mootoshi 'tail -40 /var/log/reddit-collector.log'
-```
-
-> **Don't run `./run.sh` on the Mac to "check on things."** It works, but it collects into *this repo's* empty db and writes into this repo's `profiles/`, creating a second dataset that silently diverges from the live one. `run.sh` is for local development only.
-
-**Changing the digest target:** `hermes cron edit` can only change `--schedule` and `--prompt`, so a new `--deliver` means remove + recreate. The prompt is preserved at `/opt/hermes/clean-data/reddit-collector/.cron-prompt.txt`. **Removing a job also deletes `cron/output/<job_id>/` — copy anything you want out of it first.**
+A 1Password service-account token also leaked during migration. If you use 1Password for anything else, rotate that too (ask Dhroov for the details).
 
 ---
 
-## Rollback
+## How to change which subreddits are collected
 
-Removes everything this system added; nothing else on the box is touched. No container restart needed — profiles and cron jobs are read at invocation.
-First get the three job ids (`hermes cron rm` takes an **id**, not a name):
+Edit `subreddits.txt` (one per line, exact capitalization):
 ```bash
-ssh root@mootoshi 'docker exec -u hermes hermes-gateway hermes cron list 2>&1 | grep -E "reddit-(scout-daily|watchdog|icp-weekly)" -A1'
+vi subreddits.txt
+# Make changes
+git add subreddits.txt
+git commit -m "collect: watch sweatystartup instead of X"
+git push
 ```
-Then:
-```bash
-ssh root@mootoshi '
-for id in <SCOUT_ID> <WATCHDOG_ID> <WEEKLY_ID>; do
-  docker exec -u hermes hermes-gateway hermes cron rm "$id"
-done
-rm -f /etc/cron.d/reddit-collector
-rm -rf /opt/hermes/clean-data/profiles/reddit-scout
-rm -rf /opt/hermes/clean-data/reddit-collector
-rm -f /opt/hermes/clean-data/scripts/reddit-watchdog.py
-rm -f /opt/hermes/clean-data/scripts/reddit-icp-weekly.sh
-rm -f /var/log/reddit-collector.log
-echo rolled back'
-```
+
+The change takes effect on the very next collection cycle (within 5 minutes). Keep the capitalization of subreddits already collecting — changing `Agency` to `agency` will split the history into two separate datasets.
+
+To drop a subreddit: remove the line. The profile file stays in `profiles/` as evidence, but the agent won't update it.
+
+**Capacity limit:** Each subreddit takes ~2 minutes to poll (2 feeds × 60s sleep). We currently run 4 subreddits in 8 minutes flat, leaving a 2-minute buffer before the next 5-minute collection job. Adding a 5th subreddit would collide with the interval. To go wider, either:
+- Poll comments.rss less often than new.rss (posts move ~10× slower)
+- Speed up the overall collection (not currently built)
 
 ---
 
-## Local development
+## How to change the digest format
 
+The digest is a text message sent to Telegram, read on a phone at ~35 usable columns. The format template and rules live in `agent/PROMPT.md` step 3. Edit it and commit:
 ```bash
-./run.sh                        # one full cycle: collect → profile → status
-python3 collect.py --selftest   # no network
-python3 profile_subs.py --selftest
-python3 icp_probe.py --selftest
-python3 reddit-watchdog.py --selftest
+vi agent/PROMPT.md
+# Update the digest format shape under "### 3. Produce the morning digest"
+git add agent/PROMPT.md
+git commit -m "docs: update digest format"
+git push
 ```
 
-Flags — `collect.py`: `--sub X` (repeatable) · `--subs-file <path>` · `--db <path>` · `--status` · `--selftest`
-`profile_subs.py`: `--db <path>` · `--out <dir>` · `--sub X` · `--selftest`
+The change takes effect on the next daily run. Test locally by hand-running the agent's PROMPT.md.
+
+Key rules (enforced by the agent's selftest):
+- **No tables, no pipes.** Use `·` to separate values inline.
+- **≤35 rendered columns per line.** Emoji count as 2 columns.
+- **Plain text only.** No markdown, no HTML backticks.
+- **No fabricated numbers.** Reddit RSS carries no score, upvote, or comment counts — any such number is made up and forbidden.
+- **Verbatim quotes only.** If quoting from the data, the exact string must appear in the SQLite database.
+
+If the digest is getting too long (>900 chars), either condense the signals or drop some subreddits from the summary.
 
 ---
 
-## Files
+## Known ceilings and limitations
 
-| File | Notes |
-|---|---|
-| `collect.py` | RSS → SQLite, gap detection. stdlib only |
-| `profile_subs.py` | db → markdown profiles, deterministic only. stdlib only |
-| `icp_probe.py` | the subreddit selection rule, executable |
-| `reddit-watchdog.py` | silent-unless-broken health alerting (deployed to the VPS) |
-| `reddit-icp-weekly.sh` | weekly selection review (deployed to the VPS) |
-| `schema.sql` | **authoritative — do not alter** |
-| `subreddits.txt` | the live picks, one per line |
-| `targets.md` | the scout's original research (superseded by measurement — see HANDOFF) |
-| `run.sh` | one local cycle |
-| `data/reddit.db` | empty by design; the live db is on the VPS |
-| `HANDOFF.md` | frozen decision record |
+**Feeds return ~25 most recent items.** We poll every 5 minutes, but Reddit's RSS window rotates every ~14–16 minutes. On activity spikes, items exit the window before we see them — that's a gap. Every poll records whether a gap happened in `data/polls.jsonl`. Measured during 2026-08-20: r/SaaS/comments loses ~3.3% of items on normal days.
 
----
+**No score, no upvote count, no comment count in the data.** Reddit's public RSS feeds strip all engagement metrics. Any analysis claiming "what gets upvoted" or "consensus view" is **not derivable** from what we collect. The agent's SOUL.md forbids it, and the profile files use the phrase "not derivable from RSS feeds" when the data is missing.
 
-## Known ceilings
+**Rate limit ≈ 1 request per minute per IP.** Verified: request 1 at t=0 → 200 OK, request 2 at t=+3s → 429 Too Many Requests. Each subreddit needs 2 feeds × 60s = 120s minimum. `collect.py` sleeps 60s before every request to stay safe.
 
-**Feeds return only the ~25 most recent items.** Poll too slowly and the window advances past you and data is silently lost — which is why every poll records `gap_warning`. Measured 2026-08-20: `r/SaaS/comments.rss` replaced 22 of 25 items in 14 minutes, and loses items on ~3.3% of polls during activity spikes. Adding subreddits makes this *worse*, not better — each one lengthens the cycle.
+**A modern User-Agent is required.** Default urllib returns 403 Forbidden. `collect.py` sends a Chrome User-Agent, which works. (The endpoint `/r/<sub>/about.json` returns 403 regardless, so you can't validate a subreddit exists that way — use `new.rss` instead.)
 
-**No score, no upvote count, no comment count.** Reddit's public feeds strip engagement metrics entirely. Any "what gets upvoted" analysis is **not derivable** from these feeds. The profiler writes `not derivable from RSS feeds` rather than guessing, and the agent's SOUL forbids inventing it. Nothing downstream should pretend otherwise.
-
-**Rate limit ≈ 1 request per minute per IP.** Verified: request 1 → 200, request 2 at +3s → 429. `collect.py` sleeps ≥60s before *every* request. Two collectors on one IP will 429 each other.
-
-**A browser-like User-Agent is required** — default urllib returns 403. Note `/r/<sub>/about.json` returns 403 regardless of UA; only the `.rss` endpoints work, so verify a subreddit exists by fetching `new.rss`.
-
-**Read-only by design.** This system never posts, logs in, or creates accounts. Posting is done by a human from a real browser session — that is the architecture, not a limitation.
+**Read-only by design.** This system never posts, logs in, or creates accounts. The only writer is a human using a real browser. Posting is out of scope.
 
 ---
 
 ## Deliberately not built yet
 
-Reply drafters · post drafters · send dashboards · landing pages.
+Reply drafters, post drafters, dashboards, landing pages. These are the *second half* of the design. The rule: don't build them until a week of real data proves a signal exists. The agent's SOUL.md forbids it from proposing them, so they won't drift in on their own.
 
-This is the first half of the design. The second half waits for **a week of real data proving a signal exists**. The agent's `SOUL.md` forbids it from proposing them, so nothing drifts into building them on its own.
+---
+
+## Files
+
+| File | What |
+|---|---|
+| `collect.py` | Polls Reddit RSS feeds, detects gaps, appends to JSONL. Runs in GitHub Actions every 5 min. |
+| `load_db.py` | Rebuilds SQLite from the JSONL files. Used by the cloud agent to read data. |
+| `send_telegram.py` | Sends a digest text to Telegram. Runs in GitHub Actions after the agent pushes. |
+| `reddit-watchdog.py` | Silent unless broken — sends one Telegram alert per failure mode (hourly in Actions). |
+| `profile_subs.py` | Generates the machine sections of profile markdown (n-grams, quotes, histograms). Deterministic only. |
+| `icp_probe.py` | Scores each collected item for buyer signals (ownership language, spend signals). Used for subreddit selection. |
+| `.github/workflows/collect.yml` | GitHub Actions: collector every 5 min, parallel per subreddit, merge & commit. |
+| `.github/workflows/send-digest.yml` | GitHub Actions: triggered by outbox/ push, sends Telegram, clears outbox. |
+| `.github/workflows/watchdog.yml` | GitHub Actions: hourly health check, silent when healthy. |
+| `agent/SOUL.md` | The cloud agent's binding brief — what it synthesizes, how it behaves, constraints. |
+| `agent/PROMPT.md` | The cloud agent's daily task — rebuild db, update profiles, produce digest, commit & push. |
+| `subreddits.txt` | Live picks, one per line. Changes take effect on next 5-min collection cycle. |
+| `data/items.jsonl` | Append-only log of posts and comments. Stored in git. |
+| `data/polls.jsonl` | Append-only log of collection events (time, HTTP status, gap warnings). Stored in git. |
+| `profiles/<subreddit>.md` | The product — daily-updated synthesis of what buyers say. Human sections + machine sections. |
+| `schema.sql` | SQLite schema (authoritative — do not edit). |
+| `HANDOFF.md` | Frozen record of migration decisions and historical lessons. |
+
+---
+
+## Honesty about this migration
+
+Two secrets leaked into logs during the transition from VPS to GitHub Actions (detected 2026-08-20 and 2026-08-22). They have not yet been rotated. **TODO**: rotate the Telegram bot token and the 1Password service-account token immediately if you see this.
+
+The hourly watchdog workflow has been tested manually and works when triggered by hand, but **has never yet fired on its own schedule.** If you set up monitoring on the Telegram alert, confirm it actually works by forcing a failure (or waiting 26 hours and seeing if it fires naturally).
+
+---
+
+## Development and testing
+
+Run a full local cycle (collect + synthesize + status):
+```bash
+./run.sh
+```
+
+Run individual components:
+```bash
+python3 collect.py --selftest              # validates collect.py logic
+python3 profile_subs.py --selftest         # validates profile generation
+python3 icp_probe.py --selftest            # validates subreddit scoring
+python3 reddit-watchdog.py --selftest      # validates all 8 alert paths
+python3 send_telegram.py --selftest        # validates Telegram formatting
+```
+
+Collect from specific subreddits:
+```bash
+python3 collect.py --sub SaaS --sub Agency
+```
+
+Rebuild the database from JSONL:
+```bash
+python3 load_db.py --out /tmp/test.db
+```
+
+All tools are stdlib only — no dependencies to install.
