@@ -1,0 +1,30 @@
+name: reddit-spike
+# Phase 0 gate: does Reddit's RSS answer a GitHub Actions runner at all,
+# does each run get a fresh IP (can we drop the 60s sleeps), and does the
+# 10-minute schedule actually hold? Writes one line per run to spike.log.
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: spike
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe Reddit + record IP and timing
+        run: python3 probe.py
+      - name: Commit result
+        run: |
+          git config user.name  "reddit-spike"
+          git config user.email "actions@github.com"
+          git add spike.log
+          git diff --staged --quiet || git commit -m "spike: $(date -u +%FT%TZ)"
+          git push
