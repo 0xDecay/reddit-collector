@@ -6,7 +6,7 @@ a Telegram message only on failure — empty stdout means no alert is needed.
 Every line it CAN print names an action. Stdlib only: urllib, json, os, datetime.
 Ceiling: fixed thresholds, no history/trending. Upgrade only if it cries wolf.
 """
-import json, sys, os
+import json, sys, os, glob, subprocess
 from datetime import datetime, timezone, timedelta
 from urllib.request import Request, urlopen
 from urllib.error import URLError
@@ -17,6 +17,11 @@ STALL_MIN = 15  # GitHub Actions runs every 5 min; 3 missed cycles = 15 min sile
 GAP_WINDOW_H = 6
 GAP_MIN_BURST = 3
 NON200_MAX_24H = 3
+# The cloud agent delivers by committing a digest into outbox/; a GitHub Actions
+# workflow sends it and deletes it. A file that lingers there is a digest that was
+# written but never delivered -- the exact silent failure that has cost this
+# project a day's digest twice. Normal send latency is under a minute.
+STUCK_OUTBOX_H = 2
 
 DRY_RUN = "--dry-run" in sys.argv
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -37,13 +42,16 @@ MAX_COLS = 35
 
 def _send_telegram(message):
     """Send alert to Telegram. Must fail loudly if token missing or send fails."""
-    if not TELEGRAM_BOT_TOKEN:
-        print("FATAL: TELEGRAM_BOT_TOKEN not set", file=sys.stderr)
-        sys.exit(1)
-
+    # ponytail: check dry-run BEFORE the credential. A dry run must not need a
+    # token, or the safe way to test the alerting path is unavailable exactly
+    # where you most want it -- CI, a fresh sandbox, anywhere op is not set up.
     if DRY_RUN:
         print(message)
         return
+
+    if not TELEGRAM_BOT_TOKEN:
+        print("FATAL: TELEGRAM_BOT_TOKEN not set", file=sys.stderr)
+        sys.exit(1)
 
     payload = json.dumps({
         "chat_id": TELEGRAM_CHAT_ID,
@@ -249,6 +257,25 @@ if not alerts and polls:
 
 elif not alerts and not polls:
     alerts.append("\U0001F534 COLLECTOR: no data\n   no polls yet\n   → wait")
+
+# --- stuck outbox --------------------------------------------------------
+# Use the COMMIT time, not the file mtime: in CI the checkout rewrites mtime to
+# now, so every file would always look fresh and this check would never fire.
+for _f in sorted(glob.glob("outbox/*.txt")):
+    try:
+        _ct = subprocess.run(["git", "log", "-1", "--format=%ct", "--", _f],
+                             capture_output=True, text=True, timeout=10).stdout.strip()
+        if not _ct:
+            continue  # uncommitted: nothing has had a chance to send it yet
+        _h = (now - datetime.fromtimestamp(int(_ct), timezone.utc)).total_seconds() / 3600
+        if _h > STUCK_OUTBOX_H:
+            alerts.append(
+                "\U0001F534 DIGEST NOT DELIVERED\n"
+                f"   stuck {int(_h)}h in outbox\n"
+                f"   {os.path.basename(_f)[:29]}\n"
+                "   → check send-digest")
+    except Exception:
+        pass  # a git failure must not take the whole watchdog down
 
 # --- output & send -------------------------------------------------------
 
