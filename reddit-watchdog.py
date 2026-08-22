@@ -50,6 +50,29 @@ def _visw(line):
 MAX_COLS = 35
 
 
+def _detail_lines(pairs, prefix="   ", limit=3):
+    """
+    Render (label, count) pairs as SEPARATE indented lines that each fit MAX_COLS.
+
+    Joining them onto one line grows without bound: on 2026-08-22 the sustained-gap
+    alert built '5 in 6h - r/SaaS/comment x4, r/smallbusiness/comment x1' (58 cols),
+    the width guard refused to send it, and a REAL gap alert was silently suppressed
+    for five hours across five hourly runs. Failing closed on formatting must not
+    mean failing closed on alerting.
+    """
+    out = []
+    for label, n in sorted(pairs, key=lambda x: -x[1])[:limit]:
+        line = f"{prefix}{label} x{n}"
+        if _visw(line) > MAX_COLS:                    # a very long sub name still fits
+            keep = MAX_COLS - _visw(f"{prefix}... x{n}")
+            line = f"{prefix}{label[:max(1, keep)]}... x{n}"
+        out.append(line)
+    extra = len(pairs) - limit
+    if extra > 0:
+        out.append(f"{prefix}+{extra} more")
+    return out
+
+
 def _send_telegram(message):
     """Send alert to Telegram. Must fail loudly if token missing or send fails."""
     # ponytail: check dry-run BEFORE the credential. A dry run must not need a
@@ -178,6 +201,27 @@ def _selftest():
     print("  ✓ healthy=silent, stalled, gaps, 429s all detected")
     print("  ✓ width guard enforced on all paths (≤35 cols)")
     print("  ✓ width guard can fail (proven by deliberate overwidth test)")
+
+    # Regression, 2026-08-22: gaps across six feeds produced a 166-column line.
+
+    # The width guard then refused to send, so a REAL gap alert was suppressed
+
+    # for five hours across five hourly runs. Many feeds must still render.
+
+    _lines = _detail_lines([("SaaS/comment", 4), ("smallbusiness/comment", 4),
+
+                            ("DigitalMarketing/comment", 4), ("marketingagency/comment", 4),
+
+                            ("sweatystartup/post", 4), ("Agency/comment", 4)])
+
+    assert all(_visw(l) <= MAX_COLS for l in _lines), f"detail line too wide: {_lines}"
+
+    assert any("more" in l for l in _lines), "must summarise the feeds it omitted"
+
+    assert _visw(_detail_lines([("a" * 80, 2)])[0]) <= MAX_COLS, "long name must truncate"
+
+    print("  ✓ many-feed gap alert still fits (166-col regression)")
+
     print("  ✓ token never leaked to stdout/stderr")
 
 
@@ -239,12 +283,12 @@ if not alerts and polls:
         for p in recent_gaps:
             key = (p.get("subreddit"), p.get("kind"))
             gap_counts[key] = gap_counts.get(key, 0) + 1
-        detail = ", ".join(f"r/{s}/{k} x{n}" for (s, k), n in sorted(gap_counts.items()))
+        detail = _detail_lines([(f"{s}/{k}", n) for (s, k), n in gap_counts.items()])
         alerts.append(
-            f"\U0001F534 SUSTAINED GAPS\n"
-            f"   {len(recent_gaps)} in {GAP_WINDOW_H}h · {detail}\n"
-            f"   interval too slow\n"
-            f"   → speed up")
+            "\U0001F534 SUSTAINED GAPS\n"
+            f"   {len(recent_gaps)} in {GAP_WINDOW_H}h - data lost\n"
+            + "\n".join(detail) + "\n"
+            "   → polling too slow")
 
     # HTTP error cluster
     cut24 = (now - timedelta(hours=24)).isoformat()
@@ -258,12 +302,12 @@ if not alerts and polls:
         for p in bad_polls:
             status = p.get("http_status", 0)
             status_counts[status] = status_counts.get(status, 0) + 1
-        detail = ", ".join(f"{s} x{n}" for s, n in sorted(status_counts.items()))
+        detail = _detail_lines([(str(s), n) for s, n in status_counts.items()])
         alerts.append(
-            f"\U0001F534 HTTP ERRORS\n"
+            "\U0001F534 HTTP ERRORS\n"
             f"   {len(bad_polls)} non-200 in 24h\n"
-            f"   {detail}\n"
-            f"   → check spacing")
+            + "\n".join(detail) + "\n"
+            "   → check spacing")
 
 elif not alerts and not polls:
     alerts.append("\U0001F534 COLLECTOR: no data\n   no polls yet\n   → wait")
