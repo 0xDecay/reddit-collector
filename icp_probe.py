@@ -10,6 +10,7 @@
 # Upgrade path: only if a week of data shows the ranking disagrees with reality.
 
 import sqlite3, re, collections
+import datetime
 
 import argparse, os
 _ap = argparse.ArgumentParser(description="Score collected Reddit text against the integration filter.")
@@ -17,6 +18,10 @@ _ap.add_argument("--db", default=os.path.join(os.path.dirname(os.path.abspath(__
 _ap.add_argument("--selftest", action="store_true")
 _ap.add_argument("--narrow", action="store_true",
                  help="vertical cards for a chat client (Telegram); default is the wide terminal table")
+_ap.add_argument("--since-hours", type=float, default=None,
+                 help="Only score items fetched in the last N hours. Without it the "
+                      "probe scores ALL collected items, which is right for the weekly "
+                      "selection check but wrong for a daily 'what came in today' count.")
 _ap.add_argument("--subs-file",
                  help="restrict to the subs listed here; without it, every sub in the db is scored "
                       "(including dropped ones, whose rows remain as frozen evidence)")
@@ -80,8 +85,15 @@ if not os.path.exists(DB):
                      f"scp root@mootoshi:/opt/hermes/clean-data/reddit-collector/data/reddit.db /tmp/live.db")
 
 c = sqlite3.connect(DB)
-rows = c.execute("""select subreddit, permalink, coalesce(title,'')||' '||coalesce(body,'')
-                    from items where author is not null and author not like '%AutoModerator%'""").fetchall()
+_q = """select subreddit, permalink, coalesce(title,'')||' '||coalesce(body,'')
+         from items where author is not null and author not like '%AutoModerator%'"""
+_p = ()
+if _args.since_hours:
+    _cut = (datetime.datetime.now(datetime.timezone.utc)
+            - datetime.timedelta(hours=_args.since_hours)).isoformat()
+    _q += " and fetched_at >= ?"
+    _p = (_cut,)
+rows = c.execute(_q, _p).fetchall()
 
 agg = collections.defaultdict(lambda: dict(n=0, owner=0, stack=0, buying=0, emp=0, qual=0, disq=0))
 examples = collections.defaultdict(list)
@@ -152,7 +164,8 @@ else:
         print("%-11s %6d %7.1f%% %7.1f%% %7.1f%% %8.1f%% %9.1f%% %8.1f%%" % (
             sub, a["n"], 100*a["owner"]/n, 100*a["stack"]/n, 100*a["buying"]/n,
             100*a["emp"]/n, 100*a["qual"]/n, 100*a["disq"]/n))
-        print("            -> qualified items: %d   (absolute count of plausible buyers seen in 24h)" % a["qual"])
+        _window = f"last {_args.since_hours:g}h" if _args.since_hours else "all time"
+        print("            -> qualified items: %d   (plausible buyers, %s)" % (a["qual"], _window))
 
     print()
     print("=== sample QUALIFIED items (author shows ownership + stack/spend) ===")

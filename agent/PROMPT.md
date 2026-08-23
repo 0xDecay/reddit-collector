@@ -9,17 +9,29 @@ Read `agent/SOUL.md` in full first. It is your binding brief and the single sour
 ### 1. Rebuild the SQLite database
 Run `python3 load_db.py --out data/reddit.db` to rebuild the database from `data/items.jsonl` and `data/polls.jsonl`. (The flag is `--out`, not `--db`.) Also run `git pull --rebase` first so you synthesise against the newest collected data.
 
+### 1b. Get today's signal quality
+```bash
+python3 icp_probe.py --db data/reddit.db --narrow --since-hours 24 --subs-file subreddits.txt
+```
+This prints, per subreddit, the **qualified** count for the last 24h — items whose
+author shows ownership AND either a connectable stack or spend signal. That number
+is the whole point of the digest: it is the buyer signal, not the volume.
+
+**Never estimate or invent a qualified count.** The rule lives in `icp_probe.py`
+so that it stays consistent day to day; a number you reason out yourself would
+drift and be worthless for comparison. Read the numbers off this command. If it
+fails, say so in the digest rather than substituting a guess.
+
+Also note the 🔴 marker: it means employee/job-seeker language beat owner
+language in that subreddit today, which is evidence the sub is drifting away from
+buyers. Report it when it appears.
+
 ### 2. Synthesize profiles
 **Trial subreddits — r/marketingagency and r/DigitalMarketing — are COLLECTION ONLY.** Do not
 create or edit profile files for them and do not synthesise them. Instead add one short block at
-the end of the digest, before the `Couldn't call:` block:
+the end of the digest, before the `Couldn't call:` block (its exact shape is in
+the format template in step 3 — do not keep a second copy here, the two would drift).
 
-```
-Trial (intent test):
-  marketingagency 41 items
-  DigitalMarketing 33 items
-  6 look like real hiring posts
-```
 Count something as a hiring post only when someone is asking to hire or buy — "looking to hire",
 "need someone to", "can anyone recommend an agency". Do NOT count "willing to pay" used in a
 pricing opinion, or someone advertising their own services; that phrase was 21 of 26 false matches
@@ -50,21 +62,33 @@ a parse mode, so markdown characters appear literally and a table becomes an
 unreadable wall. Wrap prose yourself; do not rely on the client to wrap it.
 
 ```
-Reddit Scout · Fri 22 Aug
+Reddit Scout · Sat 23 Aug
 
-🟢 r/SaaS  428 items
-  Pricing anxiety up sharply.
-  Founders comparing Stripe
-  fees after the rate change.
+🟢 r/SaaS
+  312 new · 7 qualified
+  Distribution anxiety again.
+  Cold email legality thread
+  drew the most replies.
   reddit.com/comments/1vvi6ed
 
-🟡 r/Agency  61 items
+🟡 r/Agency
+  45 new · 1 qualified
   Thin. Retainer churn talk
   continues, nothing new.
 
-🔴 r/smallbusiness  0 items
-  3 gap warnings - items were
-  lost, collector may be down.
+🔴 r/smallbusiness
+  380 new · 10 qualified
+  Employee language now beats
+  owner language - drifting.
+
+Signals
+  services-on-top-of-SaaS
+  recurring in 3 threads
+
+Trial (intent test):
+  marketingagency 66 new
+  DigitalMarketing 111 new
+  7 look like hiring posts
 
 Couldn't call:
   sweatystartup volume too low
@@ -73,6 +97,8 @@ Couldn't call:
 
 Rules for the body text:
 - One card per subreddit, always in the same order: SaaS, Agency, sweatystartup, smallbusiness.
+- **The first detail line is always `<new> new · <qualified> qualified`.** `new` is items collected in the last 24h; `qualified` comes from step 1b. Do NOT print a cumulative all-time item total — it barely moves day to day and tells the reader nothing about today.
+- **The `Signals` block is required whenever a theme recurs across MORE THAN ONE subreddit.** That cross-cutting pattern is the thing a per-subreddit card cannot show, and it is usually the most valuable line in the digest. Name the pattern and how many threads it appeared in. Omit the block only when nothing genuinely recurred.
 - Two-space indent under each header. Blank line between cards.
 - The `Couldn't call:` block is **required** whenever something was unconcludable — a data gap, a contradiction, or thin volume. Omit the block only when there is genuinely nothing you failed to conclude. Never quietly drop an uncertainty to make the digest look cleaner.
 - Include a permalink only when one specific thread is the evidence for the claim above it. Never invent one.
