@@ -1,40 +1,43 @@
 Reddit Scout · Sun 23 Aug
 
-🟢 r/SaaS  4462 items (+1188)
-  Distribution anxiety still
-  dominant. outbid.lol clone
-  unchanged at $154k rev.
+🔴 r/SaaS
+  1239 new · 6 qualified
+  Emp language (3.3%) now
+  beats owner (2.0%) today -
+  sub drifting from buyers.
 
-🟡 r/Agency  341 items (+102)
-  Past thin-data mark but
-  only 1 new post in 24h.
-  Feast/famine theme
-  continues, nothing new.
+🟢 r/Agency
+  105 new · 1 qualified
+  Owner-language strong (26%)
+  on just 1 post today.
 
-🟡 r/sweatystartup 157 (+70)
-  Still thinnest sub. 4 new
-  posts (trash valet, med
-  transport) - 1 data point
+🟢 r/sweatystartup
+  74 new · 1 qualified
+  New verticals: trash valet,
+  med transport - 1 mention
   each, not yet a trend.
 
-🟢 r/smallbusiness 2816 (+889)
-  Pricing/undercharging
-  keeps recurring, e.g. a
-  friend underpriced his
-  detailing work for years.
+🟢 r/smallbusiness
+  937 new · 10 qualified
+  Undercharging story: friend
+  underpriced detailing work
+  for years.
   reddit.com/comments/1vvxzno
 
+Signals
+  client-acquisition anxiety
+  recurring today in SaaS,
+  Agency, and smallbusiness
+
 Trial (intent test):
-  marketingagency 83 items
-  DigitalMarketing 251 items
-  11 look like hiring posts,
-  conservative estimate
+  marketingagency 37 new
+  DigitalMarketing 218 new
+  0 look like hiring posts
+  today (conservative)
 
 Couldn't call:
+  sweatystartup thin signal
+  (1 qualified), trend unclear.
   6 SaaS + 2 smallbiz gap
-  warnings in comment feeds,
-  recovered next poll - no
-  lasting loss found. Trial
-  hire count is cumulative
-  since collection began,
-  not a 24h figure.
+  warnings in 24h, all
+  recovered, no lasting loss.
