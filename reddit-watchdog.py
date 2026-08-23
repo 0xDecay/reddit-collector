@@ -25,8 +25,20 @@ POLLS_JSONL = os.environ.get("WATCHDOG_POLLS", "data/polls.jsonl")
 # and it is unaffected by this threshold.
 STALL_MIN = 60
 GAP_WINDOW_H = 6
-GAP_MIN_BURST = 3
-NON200_MAX_24H = 3
+
+# These are RATES, not counts, because the polling volume is not fixed.
+# Continuous polling took the collector from ~250 polls/day to ~6,800/day (27x).
+# The old absolute thresholds (3 gaps in 6h, 3 non-200s in 24h) were tuned for
+# the low-volume era; at the new volume 3 errors is 0.04% -- pure noise -- so the
+# watchdog alerted hourly all night on a perfectly healthy collector. An alert
+# that fires on noise gets muted, and then the real one is missed too.
+#
+# Observed healthy baseline 2026-08-23: non-200 0.13%, gaps 0.12% of 7,459 polls.
+# A genuine fault looks nothing like that: an IP block is ~100% non-200, and a
+# collector falling behind the RSS window pushes gaps into whole percent.
+GAP_MAX_PCT = 1.0        # gaps are permanent data loss; ~8x the healthy baseline
+NON200_MAX_PCT = 2.0     # transient 429s are normal; a block is orders larger
+MIN_POLLS_FOR_RATE = 200 # below this a rate is too noisy to judge; stay silent
 # The cloud agent delivers by committing a digest into outbox/; a GitHub Actions
 # workflow sends it and deletes it. A file that lingers there is a digest that was
 # written but never delivered -- the exact silent failure that has cost this
@@ -114,16 +126,22 @@ def _selftest():
     me = os.path.abspath(__file__)
     now = datetime.now(timezone.utc)
 
-    def build(poll_age_min, n_gaps, n_bad):
+    def build(poll_age_min, n_gaps, n_bad, n_ok=400):
+        """
+        n_ok defaults to 400 because the thresholds are RATES now: below
+        MIN_POLLS_FOR_RATE the watchdog deliberately stays silent, so a fixture
+        of 5 rows can no longer express "3% of polls failed". n_gaps/n_bad are
+        counts ON TOP of n_ok healthy polls, so the rate is n/(n+n_ok).
+        """
         d = tempfile.mkdtemp()
         jp = os.path.join(d, "polls.jsonl")
         with open(jp, "w") as f:
             ts = (now - timedelta(minutes=poll_age_min)).isoformat()
-            # One normal poll
-            f.write(json.dumps({
-                "subreddit": "SaaS", "kind": "post", "polled_at": ts,
-                "http_status": 200, "gap_warning": 0
-            }) + "\n")
+            for _ in range(n_ok):
+                f.write(json.dumps({
+                    "subreddit": "SaaS", "kind": "post", "polled_at": ts,
+                    "http_status": 200, "gap_warning": 0
+                }) + "\n")
             # Gap warnings
             for _ in range(n_gaps):
                 f.write(json.dumps({
@@ -158,17 +176,24 @@ def _selftest():
     out = run(build(90, 0, 0))
     assert "COLLECTOR STALLED" in out, f"stall not detected: {out!r}"
 
-    # 3. a single gap must NOT alert (spike, not actionable)
-    out = run(build(5, 1, 0))
-    assert out.strip() == "", f"one gap should stay silent, got: {out!r}"
+    # 3. the REAL healthy baseline must stay silent. Measured 2026-08-23:
+    #    gaps 0.12% and non-200 0.13% of 7,459 polls. The watchdog alerted
+    #    hourly all night on exactly this, because the thresholds were absolute
+    #    counts while polling volume had grown 27x.
+    out = run(build(5, 9, 10, n_ok=7440))
+    assert out.strip() == "", f"real healthy baseline must be silent, got: {out!r}"
 
-    # 4. sustained gaps must alert
-    out = run(build(5, 4, 0))
-    assert "SUSTAINED GAPS" in out, f"gap burst not detected: {out!r}"
+    # 4. a gap RATE above the threshold must alert (data is being lost)
+    out = run(build(5, 40, 0, n_ok=400))          # ~9% gaps
+    assert "SUSTAINED GAPS" in out, f"gap rate not detected: {out!r}"
 
-    # 5. http error cluster
-    out = run(build(5, 0, 9))
-    assert "HTTP ERRORS" in out, f"429 cluster not detected: {out!r}"
+    # 5. a non-200 RATE above the threshold must alert (e.g. IP blocked)
+    out = run(build(5, 0, 60, n_ok=400))          # ~13% non-200
+    assert "HTTP ERRORS" in out, f"non-200 rate not detected: {out!r}"
+
+    # 6. a tiny sample must stay silent rather than extrapolate a wild rate
+    out = run(build(5, 3, 3, n_ok=5))
+    assert out.strip() == "", f"tiny sample must not alert, got: {out!r}"
 
     # 6. width guard: verify ≤35 cols on every line
     for label, output in _widths:
@@ -273,11 +298,16 @@ if not alerts and polls:
 
     # Sustained gaps
     cutoff = (now - timedelta(hours=GAP_WINDOW_H)).isoformat()
+    window_polls = [
+        p for p in polls
+        if iso(p.get("polled_at")) and iso(p.get("polled_at")) > iso(cutoff)
+    ]
     recent_gaps = [
         p for p in polls
         if p.get("gap_warning") and iso(p.get("polled_at")) and iso(p.get("polled_at")) > iso(cutoff)
     ]
-    if len(recent_gaps) >= GAP_MIN_BURST:
+    gap_pct = 100.0 * len(recent_gaps) / len(window_polls) if window_polls else 0.0
+    if len(window_polls) >= MIN_POLLS_FOR_RATE and gap_pct > GAP_MAX_PCT:
         # Count by (sub, kind)
         gap_counts = {}
         for p in recent_gaps:
@@ -286,7 +316,8 @@ if not alerts and polls:
         detail = _detail_lines([(f"{s}/{k}", n) for (s, k), n in gap_counts.items()])
         alerts.append(
             "\U0001F534 SUSTAINED GAPS\n"
-            f"   {len(recent_gaps)} in {GAP_WINDOW_H}h - data lost\n"
+            f"   {len(recent_gaps)} of {len(window_polls)} polls\n"
+            f"   {gap_pct:.1f}% in {GAP_WINDOW_H}h - data lost\n"
             + "\n".join(detail) + "\n"
             "   → polling too slow")
 
@@ -297,7 +328,12 @@ if not alerts and polls:
         if iso(p.get("polled_at")) and iso(p.get("polled_at")) > iso(cut24)
         and p.get("http_status") and p.get("http_status") != 200
     ]
-    if len(bad_polls) > NON200_MAX_24H:
+    day_polls = [
+        p for p in polls
+        if iso(p.get("polled_at")) and iso(p.get("polled_at")) > iso(cut24)
+    ]
+    bad_pct = 100.0 * len(bad_polls) / len(day_polls) if day_polls else 0.0
+    if len(day_polls) >= MIN_POLLS_FOR_RATE and bad_pct > NON200_MAX_PCT:
         status_counts = {}
         for p in bad_polls:
             status = p.get("http_status", 0)
@@ -305,7 +341,7 @@ if not alerts and polls:
         detail = _detail_lines([(str(s), n) for s, n in status_counts.items()])
         alerts.append(
             "\U0001F534 HTTP ERRORS\n"
-            f"   {len(bad_polls)} non-200 in 24h\n"
+            f"   {len(bad_polls)} of {len(day_polls)} ({bad_pct:.1f}%)\n"
             + "\n".join(detail) + "\n"
             "   → check spacing")
 
