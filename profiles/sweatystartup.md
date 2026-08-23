@@ -9,9 +9,9 @@
 
 
 
-⚠️ Thin data — 64 items (25 posts, 39 comments). Synthesis is preliminary.
+Volume update (2026-08-23): 157 items (29 posts, 128 comments) — past the ~50-item thin-data threshold, though still the lowest-volume tracked subreddit (~5 items/day). Patterns below have held stable since first synthesized 2026-08-21.
 
-Blue-collar service business owners and aspiring founders. Dominant verticals: cleaning (residential, carpet, window, post-construction), landscaping, poop scooping, pressure washing, HVAC. Most are solo operators or very small crews (1-3 people). Career stage: first-time founders with trade skills but zero business experience; experienced tradespeople leaving W-2 jobs to go independent; side-hustlers testing a weekend business. Capital: extremely bootstrapped — many start with under $500 in equipment. Geographic: US-heavy, suburban and small-city. English-only. Revenue: pre-revenue to established ($10K/mo mentioned). The subreddit name is literal — these are physically demanding businesses.
+Blue-collar service business owners and aspiring founders. Dominant verticals: cleaning (residential, carpet, window, post-construction), landscaping, poop scooping, pressure washing, HVAC; new posts continue surfacing adjacent verticals in the same "physical local service" mold (monthly home-maintenance subscriptions, trash valet, medical transportation) — each still a single data point, not yet a pattern. Most are solo operators or very small crews (1-3 people). Career stage: first-time founders with trade skills but zero business experience; experienced tradespeople leaving W-2 jobs to go independent; side-hustlers testing a weekend business. Capital: extremely bootstrapped — many start with under $500 in equipment. Geographic: US-heavy, suburban and small-city. English-only. Revenue: pre-revenue to established ($10K/mo mentioned). The subreddit name is literal — these are physically demanding businesses.
 
 
 
@@ -22,7 +22,7 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
-⚠️ Thin data — interpretation is tentative.
+157 items collected as of 2026-08-23; interpretation below has held across four prior passes but the low daily volume (~5/day) still limits confidence relative to the larger subs.
 
 **Values:** Action over planning — "just start knocking doors" beats building a website or business plan. Word-of-mouth and reputation are the highest currency. Practical, low-cost tactics are celebrated: postcards, Facebook groups, door hangers. The community filters out anything not "sweaty" — the mod team removes posts about SaaS, digital products, and non-physical businesses.
 
@@ -108,7 +108,7 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
-⚠️ Thin data — patterns tentative.
+157 items collected as of 2026-08-23; patterns below have held stable since first synthesized but remain the thinnest sample of the four tracked subreddits.
 
 **Customer acquisition:** Facebook neighborhood groups (described as "a goldmine"); Google Business Profile and local SEO; EDDM postcards (one user reported $40K revenue from 50,000 postcards costing $300); door-knocking and in-person visits; Meta ads (one user hit $10K/mo after learning Meta ads); short-form video/reels. Text over email for customer communication — "Definitely text!" is a representative sentiment.
 
@@ -138,7 +138,7 @@ Not derivable from RSS feeds. The mod team (u/sweatystartup-ModTeam) is visibly 
 
 
 
-⚠️ Thin data — preliminary.
+157 items collected as of 2026-08-23; tone read below has held stable across all passes to date.
 
 Supportive, practical, and remarkably direct. Very little posturing — people admit mistakes openly. The dominant register is "here's what I learned the hard way." Humor is present but understated (the subreddit's name is itself a wry joke). Frustration is channeled into problem-solving rather than venting. The mod gate keeps the community tightly focused on physical service businesses, which creates a cohesive "we're all in the trenches together" feel. Newcomers are welcomed but given blunt, unvarnished advice. The most common emotional arc in posts: nervous launch → first customer relief → scaling pains → exit or burnout questions. Optimism is cautious and ground-level — nobody's talking about disrupting industries, just building something that pays the bills.
 
@@ -167,6 +167,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-23**: Volume-threshold pass: 157 items total (+70 since 2026-08-22 14:38 UTC sync, 95 authors). Corrected stale "thin data" item counts in all four synthesis blocks to current totals — volume is now past the ~50-item threshold, though still the lowest-volume tracked subreddit. Four new posts in the last 24h (monthly home-maintenance business, trash valet startup, medical transportation business, phone-tree setup question) — each a single data point within the existing "physical local service business" pattern, noted in demographics but not upgraded to a new vertical claim. No gap warnings.
 - **2026-08-22**: Afternoon synthesis pass: 23 new items since the 14:56 UTC pass (87→110 items, 76 authors). One new post (a monthly home-maintenance business) — consistent with existing verticals, not a new pattern. All five sections hold; still thin-data/preliminary. No gap warnings.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 87 items, 64 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
 - **2026-08-22**: 6 new items added (sampled: /u/the-small-crown on I have 0…, /u/AmbitiousAgent-21 on Carpet…)

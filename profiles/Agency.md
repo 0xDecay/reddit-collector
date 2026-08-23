@@ -10,7 +10,7 @@
 
 
 
-**⚠️ Thin data — 81 items total (25 posts, 56 comments). Synthesis is preliminary.**
+**Volume update (2026-08-23): 341 items total (35 posts, 306 comments) — past the ~50-item thin-data threshold. Patterns below have held stable across five passes since first synthesized 2026-08-20; still the second-lowest-volume tracked subreddit.**
 
 Small-agency founders and freelancers transitioning to agency models. Service mix: SEO/PPC, web design (Elementor, Squarespace), digital marketing, YouTube strategy, AI-powered dashboards, and performance marketing. Solo operators to teams of ~5-10. Revenue stage: early (freelancers seeking first retainers) to established ($2,250/month retainers, €70K/month ad spend management). Geographic: global, English-dominant. Career stage: former freelancers moving off Upwork/Fiverr, laid-off agency employees starting their own shops, and experienced founders scaling beyond the "one client" dependency.
 
@@ -114,7 +114,7 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 
 
 
-**⚠️ Thin data — patterns tentative.**
+**341 items collected as of 2026-08-23; patterns below have held stable across five passes since 2026-08-20 but remain based on a smaller sample than SaaS or smallbusiness.**
 
 **Lead gen:** Cold email from both domains and Gmail accounts (active debate: Gmail may get better open rates but domains look more professional); LinkedIn outreach; phone calls ("we won a $2,250/month client because we actually picked up the phone"); Reddit and organic social; buying lead lists and enriching via Clay; Upwork/Fiverr for early clients (several moving away from these).
 
@@ -176,6 +176,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-23**: Volume-threshold pass: 341 items total (+102 since 2026-08-22 14:38 UTC sync, 147 authors). Corrected stale "thin data / 81 items" language in demographics and what_they_tried to current counts — item volume has been past the ~50-item thin-data threshold for several days; no qualitative content changed, patterns confirmed stable. Only 1 new post in the last 24h ("How do you find time to acquire new clients as a solo agency owner?") — consistent with existing feast/famine time-constraint theme, not a new signal. No gap warnings.
 - **2026-08-22**: Afternoon synthesis pass: 45 new items since the 14:56 UTC pass (239→284 items, 124 authors), all comments — no new posts landed in this window. All five sections hold; still thin-data/preliminary. No gap warnings.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 239 items, 110 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
 - **2026-08-22**: 17 new items added (sampled: Agency owners: where does your…, /u/super-chalupa-975 on I am a…)

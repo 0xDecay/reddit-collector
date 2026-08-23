@@ -1,0 +1,40 @@
+Reddit Scout · Sun 23 Aug
+
+🟢 r/SaaS  4462 items (+1188)
+  Distribution anxiety still
+  dominant. outbid.lol clone
+  unchanged at $154k rev.
+
+🟡 r/Agency  341 items (+102)
+  Past thin-data mark but
+  only 1 new post in 24h.
+  Feast/famine theme
+  continues, nothing new.
+
+🟡 r/sweatystartup 157 (+70)
+  Still thinnest sub. 4 new
+  posts (trash valet, med
+  transport) - 1 data point
+  each, not yet a trend.
+
+🟢 r/smallbusiness 2816 (+889)
+  Pricing/undercharging
+  keeps recurring, e.g. a
+  friend underpriced his
+  detailing work for years.
+  reddit.com/comments/1vvxzno
+
+Trial (intent test):
+  marketingagency 83 items
+  DigitalMarketing 251 items
+  11 look like hiring posts,
+  conservative estimate
+
+Couldn't call:
+  6 SaaS + 2 smallbiz gap
+  warnings in comment feeds,
+  recovered next poll - no
+  lasting loss found. Trial
+  hire count is cumulative
+  since collection began,
+  not a 24h figure.

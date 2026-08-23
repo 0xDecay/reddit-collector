@@ -164,6 +164,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-23**: Daily synthesis pass: 2816 items total (+889 since 2026-08-22 14:38 UTC sync, 1488 authors). All five sections hold — no rewrites; pricing-anxiety and undercharging threads continue generating fresh posts (e.g. one owner realizing a friend has been "severely undercharging" them for detailing work) that reinforce the existing pattern rather than extend it. Two smallbusiness comment-feed gap warnings and one 429 in the last 24h; volume in the same window stayed high (73 posts + 864 comments), so no evidence of lasting data loss.
 - **2026-08-22**: Afternoon synthesis pass: 400 new items since the 14:56 UTC pass (1927→2327 items, 1283 authors). All five sections hold — no rewrites; recurring pain points (client quote-editing, pricing anxiety) continue generating fresh posts, nothing contradicting. One comment-feed gap warning and one 429 rate-limit response in the last 24h (of ~360 comment polls), both recovered on the next poll.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 1942 items, 1116 authors (+15 comments vs. this morning's 14:38 UTC snapshot). No new gap warnings (the Aug 21 14:38 UTC gap was already logged and recovered). No material change — all five sections hold.
 - **2026-08-22**: 210 new items added (sampled: Ghosted After Inquiry…, /u/Warm-Read8901 on Appointmen…)
