@@ -1,11 +1,12 @@
 # Profile: r/smallbusiness
 
-<!-- _last_fetched_at: 2026-08-22T14:38:35.056787Z -->
+<!-- _last_fetched_at: 2026-08-24T13:39:25.425508Z -->
 
-**Items collected:** 1927 | **Unique authors:** 1105 | **Avg/day:** 642.3 | **Trend:** flat
+**Items collected:** 4037 | **Unique authors:** 1989 | **Avg/day:** 807.4 | **Trend:** flat
 
 ## Demographics
 <!-- BEGIN_SYNTHESIS: demographics -->
+
 
 
 
@@ -13,10 +14,12 @@ Extremely broad tent — brick-and-mortar retailers, e-commerce sellers, tradesp
 
 
 
+
 <!-- END_SYNTHESIS: demographics -->
 
 ## Psychographics
 <!-- BEGIN_SYNTHESIS: psychographics -->
+
 
 
 
@@ -28,6 +31,7 @@ Extremely broad tent — brick-and-mortar retailers, e-commerce sellers, tradesp
 
 
 
+
 <!-- END_SYNTHESIS: psychographics -->
 
 ## Language & Tone
@@ -35,75 +39,76 @@ Extremely broad tent — brick-and-mortar retailers, e-commerce sellers, tradesp
 ### Recurring phrases
 
 **Bigrams (top 10):**
-- "small business" (842x)
-- "pain points" (462x)
-- "honest question" (452x)
-- "quote send" (277x)
-- "stop clients" (273x)
-- "clients editing" (273x)
-- "editing quote" (273x)
-- "someone else" (244x)
-- "come back" (244x)
-- "re doing" (243x)
+- "small business" (1945x)
+- "pain points" (1000x)
+- "honest question" (982x)
+- "re doing" (530x)
+- "running small" (529x)
+- "someone else" (518x)
+- "market research" (517x)
+- "come back" (516x)
+- "know re" (498x)
+- "search results" (497x)
 
 **Trigrams (top 10):**
-- "stop clients editing" (273x)
-- "clients editing quote" (273x)
-- "editing quote send" (273x)
-- "running small business" (237x)
-- "growing small business" (228x)
-- "know re doing" (228x)
-- "starting owning growing" (227x)
-- "owning growing small" (227x)
-- "small business works" (227x)
-- "friendly reminder smallbusiness" (226x)
+- "running small business" (509x)
+- "growing small business" (495x)
+- "know re doing" (494x)
+- "starting owning growing" (493x)
+- "owning growing small" (493x)
+- "smallbusiness question answer" (492x)
+- "question answer subreddit" (492x)
+- "answer subreddit ask" (492x)
+- "subreddit ask question" (492x)
+- "ask question starting" (492x)
 
 ### Representative quotes
 
-> "Before you read this, please know: I will not name my businesses anywhere in this post. I absolutely in no way want this to come across as spamming my business. If moderators tell me it's okay, or if …"
-> — [comment](https://www.reddit.com/r/smallbusiness/comments/1tslbvw/promote_your_business_thread_for_may_30_2026/p5301lj/)
+> "You’re actually starting from a better position than a lot of new consultancies because you already have a reasonably clear customer: UK businesses that have employees and real HR responsibilities, bu…"
+> — [comment](https://www.reddit.com/r/smallbusiness/comments/1vvfmr4/best_ways_to_market_my_small_business_to_secure/p59rd6w/)
+
+> "How do I get fully booked in my new salon (Dubai edition)"
+> — [post](https://www.reddit.com/r/smallbusiness/comments/1vwxgej/how_do_i_get_fully_booked_in_my_new_salon_dubai/)
+
+> "I run a web agency for home services actually. Here’s everything I tell my clients to do: 1) google business profile. Get as many reviews on their as possible. 3-4 a week maximum or it gets flagged as…"
+> — [comment](https://www.reddit.com/r/smallbusiness/comments/1vwlc9o/junk_removal_business/p5ihexw/)
 
 > "Quick story, advice/insight needed: Operational and Financial Systems creation and support for small businesses."
 > — [post](https://www.reddit.com/r/smallbusiness/comments/1vun9ve/quick_story_adviceinsight_needed_operational_and/)
 
-> ""oh, they're numbered" is your entire business and youve filed it under packaging detail. think about what happened in those four seconds. she wasnt reacting to lashes, she was reacting to relief. the…"
-> — [comment](https://www.reddit.com/r/smallbusiness/comments/1vtwvud/one_sale_in_two_months_what_i_got_wrong_launching/p4z2vut/)
-
-> "Y'all should go grieve the version of yourself that built your agency"
-> — [post](https://www.reddit.com/r/smallbusiness/comments/1vu940z/yall_should_go_grieve_the_version_of_yourself/)
-
-> "You can land clients in Reddit. I dont do Shopify much myself. Did one last year for a client I got in Reddit. First roasted hell out of his site. Then he pretty much said that prove it. It was long t…"
-> — [comment](https://www.reddit.com/r/smallbusiness/comments/1vueljc/freelancersagencies_who_do_uxui_or_cro_for/p50s5hl/)
+> "19 year-old Financial Controller at a struggling business - what would experienced finance people do differently?"
+> — [post](https://www.reddit.com/r/smallbusiness/comments/1vvqik9/19_yearold_financial_controller_at_a_struggling/)
 
 ### Activity by UTC hour
 
-00:00 | ██████████████████████████████████ (67)
-01:00 | ██████████████████████████████████████ (75)
-02:00 | ████████████████████████████████████ (71)
-03:00 | ██████████████████████████████ (59)
-04:00 | ████████████████████████████████████ (70)
-05:00 | ████████████████████████████████████ (71)
-06:00 | ███████████████████████████ (52)
-07:00 | ██████████████████████████████ (59)
-08:00 | ████████████████████████ (46)
-09:00 | ██████████████████████████████████ (66)
-10:00 | ██████████████████████████████████ (67)
-11:00 | █████████████████████████████████████████ (80)
-12:00 | █████████████████████████████████████████████████████████████████ (128)
-13:00 | ██████████████████████████████████████████████████████████ (114)
-14:00 | ███████████████████████████████████████████████████████████████████ (133)
-15:00 | ████████████████████████████████████████████ (86)
-16:00 | ██████████████████████████████████████████████ (91)
-17:00 | ██████████████████████████████████████ (74)
-18:00 | ████████████████████████████████ (62)
-19:00 | ██████████████████████████████████████ (75)
-20:00 | ██████████████████████████████████████████████ (91)
-21:00 | ███████████████████████████████████████████████████████ (109)
-22:00 | ██████████████████████████████████████████████ (91)
-23:00 | ██████████████████████████████████████████████ (90)
+00:00 | ███████████████████████████████████████████████████████████████████████████████████ (165)
+01:00 | ██████████████████████████████████████████████████████████████████ (130)
+02:00 | ██████████████████████████████████████████████████████████████████████ (138)
+03:00 | █████████████████████████████████████████████████████████████████████ (137)
+04:00 | ███████████████████████████████████████████████████████████████████████████ (148)
+05:00 | ███████████████████████████████████████████████████████████████████████ (141)
+06:00 | ██████████████████████████████████████████████████████████████ (122)
+07:00 | ███████████████████████████████████████████████████████████████ (125)
+08:00 | ███████████████████████████████████████████████████ (101)
+09:00 | ███████████████████████████████████████████████████████████████████ (132)
+10:00 | █████████████████████████████████████████████████████████████████████ (137)
+11:00 | ████████████████████████████████████████████████████████████████████████████████████ (166)
+12:00 | ████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (223)
+13:00 | ████████████████████████████████████████████████████████████████████████████████████████████ (183)
+14:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████ (209)
+15:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████████ (210)
+16:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████ (205)
+17:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████ (221)
+18:00 | ████████████████████████████████████████████████████████████████████████████████████████ (174)
+19:00 | ██████████████████████████████████████████████████████████████████████████████ (154)
+20:00 | ███████████████████████████████████████████████████████████████████████████████████████████████ (188)
+21:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████ (202)
+22:00 | █████████████████████████████████████████████████████████████████████████████████████████████████ (192)
+23:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (234)
 
 ## What they already tried
 <!-- BEGIN_SYNTHESIS: what_they_tried -->
+
 
 
 
@@ -119,6 +124,7 @@ Extremely broad tent — brick-and-mortar retailers, e-commerce sellers, tradesp
 
 
 
+
 <!-- END_SYNTHESIS: what_they_tried -->
 
 ## Mod rules & culture
@@ -126,7 +132,9 @@ Extremely broad tent — brick-and-mortar retailers, e-commerce sellers, tradesp
 
 
 
+
 Not derivable from RSS feeds. AutoModerator is highly visible — it posts a "Friendly Reminder" on most threads: "r/smallbusiness is a question and answer subreddit. Ask a question about starting, owning, and growing a small business and the community answers." It also warns that rule-violating posts will be removed and directs to the sidebar. The reminder appears so frequently (62+ trigram matches for "friendly reminder smallbusiness") that it functions as a permanent quality anchor. No sidebar/wiki access via RSS.
+
 
 
 
@@ -137,7 +145,9 @@ Not derivable from RSS feeds. AutoModerator is highly visible — it posts a "Fr
 
 
 
+
 Mixed and highly context-dependent. The broad tent means tone varies wildly by thread: hopeful first-timer posts land differently than weary veteran rants. Overall: pragmatic, earnest, occasionally raw. People share failures openly — the "one sale in two months" post and "My Painful Experience with RemoteLeverage.com" are examples of vulnerability that the community rewards with substantive advice. Some cynicism toward "gurus," lead-gen services, and get-rich-quick schemes. Frustration with payment processors (Stripe, Cash App) and platforms (Google, Meta) is common. Humor is present but dry. The AutoModerator's "Friendly Reminder" creates a baseline formality — this is a Q&A forum, not a hangout. Compared to r/SaaS, there is less community cohesion and more utilitarian exchange: people come with problems, get answers, leave. The subreddit functions more as a help desk for small business owners than a community of practice.
+
 
 
 
@@ -145,16 +155,16 @@ Mixed and highly context-dependent. The broad tent means tone varies wildly by t
 
 ## Top contributors
 
-- u/Inside_Lifeguard730: 15 items
-- u/DistinctVoice5216: 15 items
-- u/ComfortableCitron638: 15 items
-- u/Its-a-write-off: 12 items
-- u/No-Weight1118: 11 items
-- u/AnonJian: 11 items
-- u/Mysterious_Tune_7990: 10 items
-- u/bluekmg: 9 items
-- u/LardLad00: 9 items
-- u/Full_Management9313: 9 items
+- u/radujohn75: 23 items
+- u/AnonJian: 22 items
+- u/No-Weight1118: 19 items
+- u/Longjumping-East-572: 19 items
+- u/bluekmg: 18 items
+- u/Inside_Lifeguard730: 18 items
+- u/joshstewart90: 16 items
+- u/datawazo: 16 items
+- u/Large_Glass_8637: 16 items
+- u/DistinctVoice5216: 16 items
 
 ## Limitations & methodology
 
@@ -164,6 +174,8 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-24**: Daily synthesis pass: 4037 items total (2110 new in the last 24h — 131 posts, 1544 comments). All five sections hold — no rewrites; sampled new posts (unpaid-customer tracking, pricing/quoting questions, review collection, an AI-agent-phones-suppliers post) reinforce existing operator pain points rather than extend them. icp_probe: 🟢, 18 qualified leads in the last 24h (highest of the four tracked subs), owner language leads (11.1%). 17 comment-feed gap warnings in the last 24h (2.0% of comment polls, up from ~1% on 2026-08-22/23) — tracks with today's elevated comment volume; each recovered on the next poll, no evidence of lasting data loss.
+- **2026-08-24**: 2110 new items added (sampled: /u/AutoModerator on Small busi…, /u/sociallyineptmilk on I used…)
 - **2026-08-23**: Daily synthesis pass: 2816 items total (+889 since 2026-08-22 14:38 UTC sync, 1488 authors). All five sections hold — no rewrites; pricing-anxiety and undercharging threads continue generating fresh posts (e.g. one owner realizing a friend has been "severely undercharging" them for detailing work) that reinforce the existing pattern rather than extend it. Two smallbusiness comment-feed gap warnings and one 429 in the last 24h; volume in the same window stayed high (73 posts + 864 comments), so no evidence of lasting data loss.
 - **2026-08-22**: Afternoon synthesis pass: 400 new items since the 14:56 UTC pass (1927→2327 items, 1283 authors). All five sections hold — no rewrites; recurring pain points (client quote-editing, pricing anxiety) continue generating fresh posts, nothing contradicting. One comment-feed gap warning and one 429 rate-limit response in the last 24h (of ~360 comment polls), both recovered on the next poll.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 1942 items, 1116 authors (+15 comments vs. this morning's 14:38 UTC snapshot). No new gap warnings (the Aug 21 14:38 UTC gap was already logged and recovered). No material change — all five sections hold.

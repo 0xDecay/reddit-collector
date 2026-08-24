@@ -1,11 +1,12 @@
 # Profile: r/Agency
 
-<!-- _last_fetched_at: 2026-08-22T14:38:34.767633Z -->
+<!-- _last_fetched_at: 2026-08-24T13:39:24.723182Z -->
 
-**Items collected:** 239 | **Unique authors:** 109 | **Avg/day:** 17.1 | **Trend:** flat
+**Items collected:** 444 | **Unique authors:** 176 | **Avg/day:** 27.8 | **Trend:** flat
 
 ## Demographics
 <!-- BEGIN_SYNTHESIS: demographics -->
+
 
 
 
@@ -17,10 +18,12 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 
 
 
+
 <!-- END_SYNTHESIS: demographics -->
 
 ## Psychographics
 <!-- BEGIN_SYNTHESIS: psychographics -->
+
 
 
 
@@ -34,6 +37,7 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 
 
 
+
 <!-- END_SYNTHESIS: psychographics -->
 
 ## Language & Tone
@@ -41,75 +45,76 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 ### Recurring phrases
 
 **Bigrams (top 10):**
-- "post removed" (61x)
-- "removed because" (61x)
-- "because history" (61x)
-- "history positively" (61x)
-- "positively engaging" (61x)
-- "engaging agency" (61x)
-- "agency subreddit" (61x)
-- "subreddit free" (61x)
-- "free comment" (61x)
-- "comment posts" (61x)
+- "am bot" (107x)
+- "bot action" (107x)
+- "action performed" (107x)
+- "performed automatically" (107x)
+- "automatically please" (107x)
+- "please contact" (107x)
+- "contact moderators" (107x)
+- "moderators subreddit" (107x)
+- "subreddit questions" (107x)
+- "questions concerns" (107x)
 
 **Trigrams (top 10):**
-- "post removed because" (61x)
-- "removed because history" (61x)
-- "because history positively" (61x)
-- "history positively engaging" (61x)
-- "positively engaging agency" (61x)
-- "engaging agency subreddit" (61x)
-- "agency subreddit free" (61x)
-- "subreddit free comment" (61x)
-- "free comment posts" (61x)
-- "comment posts limited" (61x)
+- "am bot action" (107x)
+- "bot action performed" (107x)
+- "action performed automatically" (107x)
+- "performed automatically please" (107x)
+- "automatically please contact" (107x)
+- "please contact moderators" (107x)
+- "contact moderators subreddit" (107x)
+- "moderators subreddit questions" (107x)
+- "subreddit questions concerns" (107x)
+- "feel error reach" (105x)
 
 ### Representative quotes
 
-> "I'm not trying to get into an argument here - I'm genuinely curious. When I ran a digital agency we would often have clients ask for 'pay for results' pricing - we didn't feel like we could do this be…"
-> — [comment](https://www.reddit.com/r/agency/comments/1vu94nw/recommendations_for_lead_gen_partners_ukfocused/p4zp4l3/)
+> "Good definition, and I'd defend it against the "Ops is systems" answers in here. But I want to point at something: your definition has four clauses, and the whole thread only engaged with three of the…"
+> — [comment](https://www.reddit.com/r/agency/comments/1vsczp8/what_even_is_ops_anyway/p59m3xx/)
 
 > "How do I find clients for custom AI-powered dashboards and internal tools?"
 > — [post](https://www.reddit.com/r/agency/comments/1vk3474/how_do_i_find_clients_for_custom_aipowered/)
 
-> "I agree - I've run in-house sales and marketing teams with internal SDRs, I understand what it takes to make it work. You're right that a lot of marketing agencies don't do enough to set themselves ap…"
-> — [comment](https://www.reddit.com/r/agency/comments/1vu94nw/recommendations_for_lead_gen_partners_ukfocused/p4zroq9/)
+> "Good week. And the whole thread went to fixing the pipeline, so I'll go at the September hire instead, because I think that's the decision actually on the table. You have no retainers and project-base…"
+> — [comment](https://www.reddit.com/r/agency/comments/1vof1qi/summer_has_been_so_dry_and_then_4_leads_this_week/p59mug6/)
 
 > "Help a brother out. Need advice on setting up Meta assets for clients when the client has nothing set up"
 > — [post](https://www.reddit.com/r/agency/comments/1vulmyn/help_a_brother_out_need_advice_on_setting_up_meta/)
 
-> "Just sharing some rough calculations, based on my personal exp doing this for my agency and some other clients. You get about 100 connection requests a week per account. That makes 60k invites 600 acc…"
-> — [comment](https://www.reddit.com/r/agency/comments/1vujndi/linkedin_outbound/p51nvsy/)
+> "We actually built our own platform for this exact reason. We run an SEO agency and over the years we were paying for a growing stack of tools for rank tracking, reporting, client management, project m…"
+> — [comment](https://www.reddit.com/r/agency/comments/1v8z05c/what_inhouse_applications_have_you_built_for_your/p5duvpn/)
 
 ### Activity by UTC hour
 
-00:00 | ███ (4)
-01:00 | ███ (4)
-02:00 | ████ (6)
-03:00 | ██████ (11)
-04:00 | ████ (6)
-05:00 | ██████ (10)
-06:00 | ██████ (10)
-07:00 | █████ (9)
-08:00 | ███████ (12)
-09:00 | ██████████ (19)
-10:00 | ██████ (11)
-11:00 | ███████ (13)
-12:00 | ████ (7)
-13:00 | ████ (7)
-14:00 | ███████ (12)
-15:00 | █████████ (16)
-16:00 | █████████ (16)
-17:00 | █████ (9)
-18:00 | ███████ (12)
-19:00 | ███████ (13)
-20:00 | █████ (8)
-21:00 | ████ (7)
-22:00 | ███████ (12)
+00:00 | ██████ (11)
+01:00 | ███████ (12)
+02:00 | ███████ (13)
+03:00 | ████████ (14)
+04:00 | █████████ (16)
+05:00 | ██████████ (18)
+06:00 | █████████ (17)
+07:00 | █████████ (16)
+08:00 | █████████ (17)
+09:00 | █████████████ (25)
+10:00 | █████████████ (25)
+11:00 | ███████████ (21)
+12:00 | ███████ (13)
+13:00 | ███████ (13)
+14:00 | █████████ (17)
+15:00 | ████████████████████████ (46)
+16:00 | █████████████ (24)
+17:00 | ██████████ (18)
+18:00 | ████████████ (22)
+19:00 | █████████ (16)
+20:00 | ███████████ (20)
+21:00 | █████████████ (24)
+22:00 | ███████████ (21)
 23:00 | ███ (5)
 
 ## What they already tried
 <!-- BEGIN_SYNTHESIS: what_they_tried -->
+
 
 
 
@@ -127,6 +132,7 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 
 
 
+
 <!-- END_SYNTHESIS: what_they_tried -->
 
 ## Mod rules & culture
@@ -135,7 +141,9 @@ Small-agency founders and freelancers transitioning to agency models. Service mi
 
 
 
+
 Not derivable from RSS feeds. AutoModerator enforces a strict engagement gate: posts from users without "a history of positively engaging with the r/agency subreddit" are removed and redirected to r/agencynewbies or Discord. This gate is visibly aggressive — multiple AutoModerator removal comments appear daily. No sidebar/wiki access via RSS.
+
 
 
 
@@ -148,7 +156,9 @@ Not derivable from RSS feeds. AutoModerator enforces a strict engagement gate: p
 
 
 
+
 Practical, direct, sometimes weary. Less community-celebratory than r/SaaS — fewer milestone posts, more tactical problem-solving. The AutoModerator gate gives the subreddit a "vetted insiders" feel; visible discussion is from established participants. Frustration is channeled into practical questions ("How do you handle a client who…") rather than rants. Some humor but the default register is businesslike — people are running real companies with payroll and client obligations. The cold email/Gmail thread shows the subreddit's tolerance for unpolished tactics: the question "has anybody ever tried cold email with @gmail.com?" got substantive answers, not gatekeeping.
+
 
 
 
@@ -157,16 +167,16 @@ Practical, direct, sometimes weary. Less community-celebratory than r/SaaS — f
 
 ## Top contributors
 
+- u/Mark_ODS: 14 items
+- u/seb-in-public: 12 items
 - u/RealiseAdvisory_NED: 11 items
+- u/kerch2007: 9 items
+- u/darren_dead: 8 items
+- u/Emotional-Cod-3689: 8 items
+- u/martis941: 7 items
 - u/pawsomedogs: 6 items
-- u/martis941: 6 items
 - u/sggfd1213: 5 items
-- u/Optimal-Criticism-89: 5 items
-- u/josh-bfb2b: 4 items
-- u/jayson_OutreachBloom: 4 items
-- u/Resident-Try-5858: 4 items
-- u/ColonelTamdi: 4 items
-- u/-WordPressSpecialist: 4 items
+- u/Vast_Poetry_50: 5 items
 
 ## Limitations & methodology
 
@@ -176,6 +186,8 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-24**: Daily synthesis pass: 444 items total (205 new in the last 24h, but only 2 new posts — "vibe coding CRM vs Zoho CRM" and "how do you find time to acquire new clients as a solo agency owner" — both consistent with existing themes, no new signal). All five sections hold — no rewrites. No gap warnings. icp_probe: 🟢, 1 qualified lead in the last 24h, owner language leads (23.5%).
+- **2026-08-24**: 205 new items added (sampled: /u/Lucky-Rent8617 on How do yo…, /u/WhyNotYoshi on Vibe coding …)
 - **2026-08-23**: Volume-threshold pass: 341 items total (+102 since 2026-08-22 14:38 UTC sync, 147 authors). Corrected stale "thin data / 81 items" language in demographics and what_they_tried to current counts — item volume has been past the ~50-item thin-data threshold for several days; no qualitative content changed, patterns confirmed stable. Only 1 new post in the last 24h ("How do you find time to acquire new clients as a solo agency owner?") — consistent with existing feast/famine time-constraint theme, not a new signal. No gap warnings.
 - **2026-08-22**: Afternoon synthesis pass: 45 new items since the 14:56 UTC pass (239→284 items, 124 authors), all comments — no new posts landed in this window. All five sections hold; still thin-data/preliminary. No gap warnings.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 239 items, 110 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.

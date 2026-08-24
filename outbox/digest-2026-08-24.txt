@@ -1,0 +1,46 @@
+Reddit Scout · Mon 24 Aug
+
+🔴 r/SaaS
+  2106 new · 10 qualified
+  Emp language (3.4%) beat
+  owner (2.3%) - first time
+  seen, 1 day of data.
+  Distribution/AI-margin
+  anxiety continues.
+
+🟢 r/Agency
+  159 new · 1 qualified
+  Quiet day, 2 posts, no
+  new signal.
+
+🟢 r/sweatystartup
+  86 new · 1 qualified
+  Bookkeeping/tool-spend
+  question, on-pattern.
+
+🟢 r/smallbusiness
+  1675 new · 18 qualified
+  Most qualified today.
+  AI-calls-suppliers post
+  is a new wrinkle.
+
+Signals
+  Tool-selection questions
+  in 3 subs: Agency,
+  sweatystartup, smallbiz.
+
+Trial (intent test):
+  marketingagency 59 new
+  DigitalMarketing 452 new
+  3 look like hiring posts,
+  conservative count.
+
+Couldn't call:
+  SaaS emp>owner: 1 day
+  only, too early to call
+  a drift.
+  SaaS/smallbiz comment
+  gaps hit 2-2.6% today
+  (vs ~1% prior) at peak
+  volume - can't rule out
+  lost comments there.

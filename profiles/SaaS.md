@@ -1,11 +1,12 @@
 # Profile: r/SaaS
 
-<!-- _last_fetched_at: 2026-08-22T14:38:34.805105Z -->
+<!-- _last_fetched_at: 2026-08-24T13:39:24.767752Z -->
 
-**Items collected:** 3274 | **Unique authors:** 1460 | **Avg/day:** 818.5 | **Trend:** flat
+**Items collected:** 5973 | **Unique authors:** 2394 | **Avg/day:** 995.5 | **Trend:** flat
 
 ## Demographics
 <!-- BEGIN_SYNTHESIS: demographics -->
+
 
 
 
@@ -15,10 +16,12 @@ Solo developer-founders dominate — 80%+ of authors self-identify as technical 
 
 
 
+
 <!-- END_SYNTHESIS: demographics -->
 
 ## Psychographics
 <!-- BEGIN_SYNTHESIS: psychographics -->
+
 
 
 
@@ -32,6 +35,7 @@ Solo developer-founders dominate — 80%+ of authors self-identify as technical 
 
 
 
+
 <!-- END_SYNTHESIS: psychographics -->
 
 ## Language & Tone
@@ -39,75 +43,76 @@ Solo developer-founders dominate — 80%+ of authors self-identify as technical 
 ### Recurring phrases
 
 **Bigrams (top 10):**
-- "am bot" (260x)
-- "bot action" (260x)
-- "action performed" (260x)
-- "performed automatically" (260x)
-- "automatically please" (260x)
-- "please contact" (260x)
-- "contact moderators" (260x)
-- "moderators subreddit" (260x)
-- "subreddit questions" (260x)
-- "questions concerns" (260x)
+- "am bot" (444x)
+- "bot action" (444x)
+- "action performed" (444x)
+- "performed automatically" (444x)
+- "automatically please" (444x)
+- "please contact" (444x)
+- "contact moderators" (444x)
+- "moderators subreddit" (444x)
+- "subreddit questions" (444x)
+- "questions concerns" (444x)
 
 **Trigrams (top 10):**
-- "am bot action" (260x)
-- "bot action performed" (260x)
-- "action performed automatically" (260x)
-- "performed automatically please" (260x)
-- "automatically please contact" (260x)
-- "please contact moderators" (260x)
-- "contact moderators subreddit" (260x)
-- "moderators subreddit questions" (260x)
-- "subreddit questions concerns" (260x)
-- "first paying customer" (231x)
+- "am bot action" (444x)
+- "bot action performed" (444x)
+- "action performed automatically" (444x)
+- "performed automatically please" (444x)
+- "automatically please contact" (444x)
+- "please contact moderators" (444x)
+- "contact moderators subreddit" (444x)
+- "moderators subreddit questions" (444x)
+- "subreddit questions concerns" (444x)
+- "low effort ai" (353x)
 
 ### Representative quotes
 
 > "I'm coming from a business side of things not a developer, I have a co-developer- and you said "before I build an MVP", What you're asking for IS an MVP.. An MVP is your idea in the absolute, and simp…"
 > — [comment](https://www.reddit.com/r/SaaS/comments/1vusjki/how_do_you_properly_validate_a_b2c_saas_idea/p54afiw/)
 
-> "How to get your first customer as a SaaS builder?"
-> — [post](https://www.reddit.com/r/SaaS/comments/1vth33i/how_to_get_your_first_customer_as_a_saas_builder/)
+> "The code worked and the product looked polished. The real problems appeared between screens."
+> — [post](https://www.reddit.com/r/SaaS/comments/1vw17ve/the_code_worked_and_the_product_looked_polished/)
 
 > "u/dingdongditchyou - You are correct that reliability is a key concern. Our reliability regressed in v2 but we have been addressing the issues that came up and now have achieved a higher reliability t…"
 > — [comment](https://www.reddit.com/r/SaaS/comments/1vt2jt0/former_sales_expert/p4svbfa/)
 
-> "Built a tool that turns Claude Code, Codex, and Hermes sessions into a shareable graph your agent can query"
-> — [post](https://www.reddit.com/r/SaaS/comments/1vt90xo/built_a_tool_that_turns_claude_code_codex_and/)
+> "How to get your first customer as a SaaS builder?"
+> — [post](https://www.reddit.com/r/SaaS/comments/1vth33i/how_to_get_your_first_customer_as_a_saas_builder/)
 
 > "Very late to the party maybe you've already found a solution maybe you've back benched it or maybe you're still trying, whatever the case here's a bit of info might be useful... Conversion rates on em…"
 > — [comment](https://www.reddit.com/r/SaaS/comments/1qbwo1i/how_to_find_quality_lists_and_send_mass_email/p53y4h4/)
 
 ### Activity by UTC hour
 
-00:00 | ███████████████████████████████████ (68)
-01:00 | ████████████████████████████████████████████████████████ (111)
-02:00 | ████████████████████████████████████████████████████████ (110)
-03:00 | ██████████████████████████████████████████████████████████ (114)
-04:00 | ██████████████████████████████████████████████████████████████████ (130)
-05:00 | █████████████████████████████████████████████████████████████ (121)
-06:00 | ██████████████████████████████████████████████████████████████████ (130)
-07:00 | ███████████████████████████████████████████████████████████████████████████████████ (164)
-08:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████ (203)
-09:00 | ██████████████████████████████████████████████████████████████████████████ (147)
-10:00 | ██████████████████████████████████████████████████████████████████████████████████████████████ (187)
-11:00 | ███████████████████████████████████████████████████████████████████████████████████████████ (180)
-12:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████ (216)
-13:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (224)
-14:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████ (209)
-15:00 | ██████████████████████████████████████████████████████████████████████████████ (154)
-16:00 | ████████████████████████████████████████████████████████████████ (127)
-17:00 | █████████████████████████████████████████████████████ (104)
-18:00 | ██████████████████████████████████████████████████████████████ (122)
-19:00 | ██████████████████████████████████████████████████████████ (115)
-20:00 | ██████████████████████████████████████████████████ (98)
-21:00 | ███████████████████████████████████████████████ (92)
-22:00 | ███████████████████████████████████████████ (84)
-23:00 | █████████████████████████████████ (64)
+00:00 | █████████████████████████████████████████████████████████████████ (128)
+01:00 | ███████████████████████████████████████████████████████████████████████████████ (157)
+02:00 | █████████████████████████████████████████████████████████████████████████████████████████████████ (193)
+03:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████ (197)
+04:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████ (204)
+05:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████ (205)
+06:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (245)
+07:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (280)
+08:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (322)
+09:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (269)
+10:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (340)
+11:00 | ██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (330)
+12:00 | ████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (366)
+13:00 | ████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (343)
+14:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (313)
+15:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (277)
+16:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (277)
+17:00 | ███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (284)
+18:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (312)
+19:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████ (264)
+20:00 | █████████████████████████████████████████████████████████████████████████████████████████████████████ (200)
+21:00 | ██████████████████████████████████████████████████████████████████████████████████ (162)
+22:00 | ████████████████████████████████████████████████████████████████████████████████████ (166)
+23:00 | ██████████████████████████████████████████████████████████████████████ (139)
 
 ## What they already tried
 <!-- BEGIN_SYNTHESIS: what_they_tried -->
+
 
 
 
@@ -123,6 +128,7 @@ Solo developer-founders dominate — 80%+ of authors self-identify as technical 
 
 
 
+
 <!-- END_SYNTHESIS: what_they_tried -->
 
 ## Mod rules & culture
@@ -131,7 +137,9 @@ Solo developer-founders dominate — 80%+ of authors self-identify as technical 
 
 
 
+
 Not derivable from RSS feeds. AutoModerator is visibly active — it removes low-effort/AI-generated content, enforces a subreddit-karma gate before allowing link posts ("Links in comments require to gain karma first"), and removes posts from users without "a history of positively engaging." A "no low-effort/AI content" rule is enforced automatically. No sidebar or wiki content is accessible via the collector's RSS-only path.
+
 
 
 
@@ -144,7 +152,9 @@ Not derivable from RSS feeds. AutoModerator is visibly active — it removes low
 
 
 
+
 Informal, direct, and community-supportive. High candor about failures — posts with titles like "$276 in 28 days" and "8 months, 50k downloads, and $276 ❤️" get substantive engagement. Frustration is expressed openly but constructively, especially around distribution struggles. Sarcasm is present but light; the dominant register is practical problem-solving. AutoModerator removals for "low-effort/AI content" create a visible quality floor — comments consisting only of congratulations ("well done!") exist alongside long tactical replies. The community rewards specificity and penalizes vagueness. Undercurrent of fatigue with AI-wrapper hype and launch-site spam. Optimism is cautious — "it's harder than I thought" is a recurring sentiment, but so is "just got my first paying customer."
+
 
 
 
@@ -153,16 +163,16 @@ Informal, direct, and community-supportive. High candor about failures — posts
 
 ## Top contributors
 
+- u/Appropriate-End-6328: 59 items
+- u/Alarming-Match-7464: 52 items
+- u/aashishdesign: 42 items
+- u/ApplicationNo4339: 42 items
+- u/According-Chip948: 42 items
+- u/Untilloneday: 41 items
 - u/remzi_dev: 40 items
-- u/aashishdesign: 40 items
-- u/Alarming-Match-7464: 40 items
-- u/Prince-ow: 33 items
-- u/dingdongditchyou: 26 items
-- u/Entire_Layer_750: 26 items
-- u/No-Weight1118: 25 items
-- u/Worldly-Sprinkles-76: 23 items
-- u/ApplicationNo4339: 23 items
-- u/thedev13: 20 items
+- u/No-Weight1118: 39 items
+- u/Prince-ow: 34 items
+- u/Ok_Gur_9033: 29 items
 
 ## Limitations & methodology
 
@@ -172,6 +182,8 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-24**: Daily synthesis pass: 5973 items total (2699 new in the last 24h — 196 posts, 1910 comments — the largest single-day gain to date). All five sections hold — no rewrites; sampled new posts (first-sale milestones, distribution/monetization struggles, AI-margin and AI-search-visibility anxiety) reinforce existing patterns rather than extend them. outbid-clone chatter continues but today's sampled figure ($139K, one thread) is a different post than the $154K reference point and not confirmed as an update to it — left unchanged. EU AI Act Article 4 theme still sits at a single distinct post, unchanged from prior passes — still too thin to promote. icp_probe flagged 🔴 today: employee/job-seeker language (3.4%) narrowly beat owner language (2.3%) in the last 24h — first time this flag has been recorded for r/SaaS; noted here as a data point, not yet a section rewrite (one day of data). 23 comment-feed gap warnings in the last 24h (2.6% of comment polls, roughly double the ~1% rate seen 2026-08-22/23) — consistent with today's unusually high comment volume outrunning the poll interval; each recovered on the next poll, so no evidence of lasting data loss, but the rate is trending up with volume and worth watching.
+- **2026-08-24**: 2699 new items added (sampled: /u/ApprehensiveRule6270 on I w…, /u/Outrageous-Scene9336 on PLS…)
 - **2026-08-23**: Daily synthesis pass: 4462 items total (+1188 since 2026-08-22 14:38 UTC sync, 1887 authors). All five sections hold — no rewrites. "outbid-clone" signal unchanged (still reported at $154K revenue, matching last pass — not a new data point). EU AI Act Article 4 compliance-anxiety theme reappeared once more (now 2 occurrences total) — still too thin to promote to a section claim. Six SaaS comment-feed gap warnings and two SaaS post-feed 429s in the last 24h; volume in the same window stayed high (115 posts + 1124 comments), so no evidence of lasting data loss.
 - **2026-08-22**: Afternoon synthesis pass: 553 new items since the 14:56 UTC pass (3274→3827 items, 1655 authors). All five sections hold — no rewrites. "outbid-clone" signal updated: outbid.lol now reported at $154K revenue (was $100K at last pass) — still a single-thread data point, not upgraded to a pattern claim. New but isolated: an EU AI Act Article 4 compliance-anxiety post (missing training records) — one occurrence, too thin to add as a section claim. Four SaaS comment-feed gap warnings in the last 24h (of 361 comment polls, ~1%), each recovered on the next poll — no evidence of lasting data loss.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 3284 items, 1466 authors (+10 items vs. this morning's 14:38 UTC snapshot). No new gap warnings since last pass. No material change — all five sections hold.

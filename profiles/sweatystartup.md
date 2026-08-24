@@ -1,11 +1,12 @@
 # Profile: r/sweatystartup
 
-<!-- _last_fetched_at: 2026-08-22T14:38:35.260994Z -->
+<!-- _last_fetched_at: 2026-08-24T13:39:25.871454Z -->
 
-**Items collected:** 87 | **Unique authors:** 63 | **Avg/day:** 4.6 | **Trend:** flat
+**Items collected:** 198 | **Unique authors:** 121 | **Avg/day:** 9.4 | **Trend:** flat
 
 ## Demographics
 <!-- BEGIN_SYNTHESIS: demographics -->
+
 
 
 
@@ -15,10 +16,12 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
+
 <!-- END_SYNTHESIS: demographics -->
 
 ## Psychographics
 <!-- BEGIN_SYNTHESIS: psychographics -->
+
 
 
 
@@ -32,6 +35,7 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
+
 <!-- END_SYNTHESIS: psychographics -->
 
 ## Language & Tone
@@ -39,72 +43,75 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 ### Recurring phrases
 
 **Bigrams (top 10):**
-- "cleaning business" (43x)
-- "carpet cleaning" (29x)
-- "differently starting" (12x)
-- "starting cleaning" (12x)
-- "business 100" (12x)
-- "window cleaning" (8x)
-- "service businesses" (7x)
-- "poop scooping" (7x)
-- "scooping business" (7x)
-- "dog poop" (6x)
+- "cleaning business" (49x)
+- "carpet cleaning" (30x)
+- "home maintenance" (23x)
+- "phone tree" (23x)
+- "maintenance business" (22x)
+- "setup phone" (22x)
+- "considering monthly" (21x)
+- "monthly home" (21x)
+- "trash valet" (15x)
+- "service business" (14x)
 
 **Trigrams (top 10):**
-- "carpet cleaning business" (24x)
-- "differently starting cleaning" (12x)
-- "starting cleaning business" (12x)
-- "cleaning business 100" (12x)
-- "poop scooping business" (7x)
-- "window cleaning startup" (6x)
-- "text vs email" (5x)
-- "sold carpet cleaning" (4x)
-- "google business profile" (3x)
-- "landscaping business owners" (3x)
+- "carpet cleaning business" (25x)
+- "setup phone tree" (22x)
+- "considering monthly home" (21x)
+- "monthly home maintenance" (21x)
+- "home maintenance business" (21x)
+- "differently starting cleaning" (13x)
+- "starting cleaning business" (13x)
+- "cleaning business 100" (13x)
+- "start trash valet" (13x)
+- "poop scooping business" (9x)
 
 ### Representative quotes
 
-> "Hey man I just sold my carpet cleaning business in February, great business!! We only serviced commercial multifamily rental properties (apartment complexes), think a 350 unit apartment building owned…"
-> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vsvgbd/carpet_cleaning_business/p4xh3pn/)
+> "You’re 18, you’ve already been doing this for a year and a half, and you’ve hit your first plateau. That’s actually the point where you need to stop thinking like “how do I get more work?” and start t…"
+> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vnluaz/landscaping_business_owners_what_helped_you_grow/p5ckkcy/)
 
 > "What growing a dog poop scooping business taught me about getting and keeping local customers"
 > — [post](https://www.reddit.com/r/sweatystartup/comments/1vpjb6v/what_growing_a_dog_poop_scooping_business_taught/)
 
-> "Under $100 the only thing that matters is getting into someone's house this week. Everything else on your list is prep, and prep does not pay. What actually landed the first jobs for crews I know: Ten…"
-> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vtnp4y/what_would_you_do_differently_if_you_were/p50uul1/)
+> "I’d launch. You can research this thing for six months and still learn more in your first two weeks actually trying to sell it. I run a route-based service business, and one thing I learned early is t…"
+> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vvtk5u/startup_trash_valet/p5bssam/)
 
-> "The honest answer is that most service businesses hit it around $3-5k a month in spend, but time isn't actually the right trigger. The trigger is whether you've stopped finding things when you look. I…"
-> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vqakqv/at_what_point_does_google_ads_become_too_much_to/p55daew/)
+> "Hey man I just sold my carpet cleaning business in February, great business!! We only serviced commercial multifamily rental properties (apartment complexes), think a 350 unit apartment building owned…"
+> — [comment](https://www.reddit.com/r/sweatystartup/comments/1vsvgbd/carpet_cleaning_business/p4xh3pn/)
 
-> "We've mailed nearly 50,000 postcards for only $300. They’ve generated over $40K in revenue so far."
-> — [post](https://www.reddit.com/r/sweatystartup/comments/1vnuees/weve_mailed_nearly_50000_postcards_for_only_300/)
+> "Considering a monthly home maintenance business."
+> — [post](https://www.reddit.com/r/sweatystartup/comments/1vvikf0/considering_a_monthly_home_maintenance_business/)
 
 ### Activity by UTC hour
 
-00:00 | ███ (5)
-01:00 | ████ (6)
-02:00 | █████ (8)
-03:00 | ██ (3)
-04:00 | █ (1)
-05:00 | ██ (2)
-06:00 | ██ (2)
-09:00 | ██ (2)
-10:00 | █ (1)
-11:00 | ██ (2)
-12:00 | ████ (7)
-13:00 | ██████ (10)
-14:00 | ███ (5)
-15:00 | ███ (4)
-16:00 | ███ (4)
-18:00 | ████ (6)
-19:00 | ██ (3)
-20:00 | ████ (7)
-21:00 | ██ (2)
-22:00 | ███ (4)
-23:00 | ██ (3)
+00:00 | █████ (8)
+01:00 | █████████ (17)
+02:00 | ███████ (13)
+03:00 | ████████ (15)
+04:00 | █████ (9)
+05:00 | ███ (4)
+06:00 | ████ (7)
+07:00 | ███ (4)
+09:00 | ████ (6)
+10:00 | ██ (2)
+11:00 | █████ (9)
+12:00 | ██████ (10)
+13:00 | █████████ (17)
+14:00 | ████ (7)
+15:00 | ████ (6)
+16:00 | ████ (6)
+17:00 | ███ (4)
+18:00 | ██████ (10)
+19:00 | █████ (9)
+20:00 | ███████ (13)
+21:00 | █████ (9)
+22:00 | █████ (9)
+23:00 | ███ (4)
 
 ## What they already tried
 <!-- BEGIN_SYNTHESIS: what_they_tried -->
+
 
 
 
@@ -120,6 +127,7 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
+
 <!-- END_SYNTHESIS: what_they_tried -->
 
 ## Mod rules & culture
@@ -127,7 +135,9 @@ Blue-collar service business owners and aspiring founders. Dominant verticals: c
 
 
 
+
 Not derivable from RSS feeds. The mod team (u/sweatystartup-ModTeam) is visibly active — they remove posts that are not about physical service businesses, with a comment listing accepted categories: "carpentry, moving companies, power washing, window cleaning, screen printing, masonry, landscaping, painting." A post titled "$250/mo/client idea validation" was removed with this reason, suggesting a strict gate against SaaS/digital business discussion. No sidebar/wiki access via RSS.
+
 
 
 
@@ -138,9 +148,11 @@ Not derivable from RSS feeds. The mod team (u/sweatystartup-ModTeam) is visibly 
 
 
 
+
 157 items collected as of 2026-08-23; tone read below has held stable across all passes to date.
 
 Supportive, practical, and remarkably direct. Very little posturing — people admit mistakes openly. The dominant register is "here's what I learned the hard way." Humor is present but understated (the subreddit's name is itself a wry joke). Frustration is channeled into problem-solving rather than venting. The mod gate keeps the community tightly focused on physical service businesses, which creates a cohesive "we're all in the trenches together" feel. Newcomers are welcomed but given blunt, unvarnished advice. The most common emotional arc in posts: nervous launch → first customer relief → scaling pains → exit or burnout questions. Optimism is cautious and ground-level — nobody's talking about disrupting industries, just building something that pays the bills.
+
 
 
 
@@ -148,16 +160,16 @@ Supportive, practical, and remarkably direct. Very little posturing — people a
 
 ## Top contributors
 
+- u/ScoopyChatt: 15 items
+- u/MackRaf: 6 items
+- u/BPCodeMonkey: 6 items
+- u/Aggressive-Barber326: 6 items
+- u/SoftwareToHVAC: 5 items
 - u/Regular-Watercress34: 4 items
-- u/Ok_Fill1851: 3 items
-- u/Keller_Clean: 3 items
-- u/BPCodeMonkey: 3 items
-- u/AmbitiousAgent-21: 3 items
-- u/youknowit84: 2 items
-- u/realjmitt: 2 items
-- u/m1ster_frundles: 2 items
-- u/andrewtimberlake: 2 items
-- u/SwankyTroll: 2 items
+- u/Obvious-Dinner-1082: 4 items
+- u/sweatystartup-ModTeam: 3 items
+- u/multi_reality: 3 items
+- u/moransmechanical: 3 items
 
 ## Limitations & methodology
 
@@ -167,6 +179,8 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-24**: Daily synthesis pass: 198 items total (111 new in the last 24h, 6 new posts: bookkeeping/admin software spend, laundromat website, trash valet startup, medical transportation business, phone-tree setup, a sibling-partnership idea check). All within the existing "physical local service business" pattern — nothing new enough to extend a section. All five sections hold — no rewrites. No gap warnings. icp_probe: 🟢, 1 qualified lead in the last 24h.
+- **2026-08-24**: 111 new items added (sampled: /u/sweatystartup-ModTeam on So…, Software bloat: What bookkeepi…)
 - **2026-08-23**: Volume-threshold pass: 157 items total (+70 since 2026-08-22 14:38 UTC sync, 95 authors). Corrected stale "thin data" item counts in all four synthesis blocks to current totals — volume is now past the ~50-item threshold, though still the lowest-volume tracked subreddit. Four new posts in the last 24h (monthly home-maintenance business, trash valet startup, medical transportation business, phone-tree setup question) — each a single data point within the existing "physical local service business" pattern, noted in demographics but not upgraded to a new vertical claim. No gap warnings.
 - **2026-08-22**: Afternoon synthesis pass: 23 new items since the 14:56 UTC pass (87→110 items, 76 authors). One new post (a monthly home-maintenance business) — consistent with existing verticals, not a new pattern. All five sections hold; still thin-data/preliminary. No gap warnings.
 - **2026-08-22**: Verification pass on new Claude Code cloud infra (first run since this morning's mootoshi migration). DB rebuilt from JSONL: 87 items, 64 authors (unchanged vs. this morning's 14:38 UTC snapshot). No gap warnings. No material change — all five sections hold; still thin-data/preliminary.
