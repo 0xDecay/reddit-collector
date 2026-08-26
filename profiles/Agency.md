@@ -186,6 +186,7 @@ This profile is built from actual text people posted, not from what ranked highe
 
 ## Change log
 
+- **2026-08-26**: Daily synthesis pass: 64 new items in the last 24h, only 1 new post ("Question on whitelabel setup") — consistent with existing service-mix/lead-gen themes, no new signal. All five sections hold — no rewrites. No gap warnings. icp_probe: 🟢, 1 qualified lead in the last 24h, owner language leads (19.6%).
 - **2026-08-25**: Daily synthesis pass: 89 new items in the last 24h, only 2 new posts ("Looking to Partner with Agencies" and "How I fit client acquisition into ~5 hours a week as a solo agency owner") — both consistent with existing feast/famine and lead-gen themes, no new signal. All five sections hold — no rewrites. No gap warnings. icp_probe: 🟡, 0 qualified leads in the last 24h (owner language still leads at 6.3%).
 - **2026-08-24**: Daily synthesis pass: 444 items total (205 new in the last 24h, but only 2 new posts — "vibe coding CRM vs Zoho CRM" and "how do you find time to acquire new clients as a solo agency owner" — both consistent with existing themes, no new signal). All five sections hold — no rewrites. No gap warnings. icp_probe: 🟢, 1 qualified lead in the last 24h, owner language leads (23.5%).
 - **2026-08-24**: 205 new items added (sampled: /u/Lucky-Rent8617 on How do yo…, /u/WhyNotYoshi on Vibe coding …)
