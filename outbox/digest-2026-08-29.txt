@@ -1,0 +1,41 @@
+Reddit Scout · Sat 29 Aug
+
+🔴 Collector down
+  0 new · all 4 subs
+  No polls since Fri 04:53
+  UTC (~33h gap). Every
+  sub stopped at once -
+  pipeline issue, not a
+  demand drop.
+
+🔴 r/SaaS
+  0 new · 0 qualified
+  No data in 24h window.
+
+🔴 r/Agency
+  0 new · 0 qualified
+  No data in 24h window.
+
+🔴 r/sweatystartup
+  0 new · 0 qualified
+  No data in 24h window.
+
+🔴 r/smallbusiness
+  0 new · 0 qualified
+  No data in 24h window.
+
+Trial (intent test):
+  marketingagency 0 new
+  DigitalMarketing 0 new
+  Same outage, no signal
+  today.
+
+Couldn't call:
+  Nothing today - full
+  collector outage means
+  zero items across every
+  tracked sub. Qualified
+  counts are unscored, not
+  zero-signal. Fix the
+  cron/collector job, not
+  this agent.
