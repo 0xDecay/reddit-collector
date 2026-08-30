@@ -1,0 +1,46 @@
+Reddit Scout · Sun 30 Aug
+
+🔴 Collector down
+  0 new · all 4 subs
+  No polls since Fri
+  Aug 28, 04:53 UTC
+  (~57h gap, growing).
+  GitHub Actions itself
+  stopped firing - both
+  the cron collector and
+  the push-triggered
+  digest sender went
+  silent at the same
+  time.
+
+🔴 r/SaaS
+  0 new · 0 qualified
+
+🔴 r/Agency
+  0 new · 0 qualified
+
+🔴 r/sweatystartup
+  0 new · 0 qualified
+
+🔴 r/smallbusiness
+  0 new · 0 qualified
+
+Trial (intent test):
+  marketingagency 0 new
+  DigitalMarketing 0 new
+  Same outage, no signal.
+
+Couldn't call:
+  Everything - zero data
+  since Fri. Qualified
+  counts are unscored,
+  not zero-signal.
+  Also: Aug 28 and Aug 29
+  digests never sent -
+  2 already stuck in
+  outbox, this makes 3.
+  Check GitHub Actions
+  status/billing for
+  this repo - not a
+  code bug, both
+  workflows died at once.
