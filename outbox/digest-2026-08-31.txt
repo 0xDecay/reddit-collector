@@ -1,0 +1,46 @@
+Reddit Scout · Mon 31 Aug
+
+🔴 Collector down (day 4)
+  0 new · all 4 subs
+  No polls since Fri
+  Aug 28, 04:53 UTC
+  (~81h gap, growing).
+  Root cause found: all
+  4 workflows show
+  disabled_manually,
+  flipped together at
+  06:25 EDT Aug 28. Not
+  billing - a deliberate
+  disable.
+
+🔴 r/SaaS
+  0 new · 0 qualified
+
+🔴 r/Agency
+  0 new · 0 qualified
+
+🔴 r/sweatystartup
+  0 new · 0 qualified
+
+🔴 r/smallbusiness
+  0 new · 0 qualified
+
+Trial (intent test):
+  marketingagency 0 new
+  DigitalMarketing 0 new
+  Same outage, no signal.
+
+Couldn't call:
+  Everything - zero data
+  4 days running. Qualified
+  counts are unscored,
+  not zero-signal.
+  3 prior digests (Aug
+  28-30) never sent -
+  send-digest.yml was
+  off too, so they're
+  stuck in outbox. This
+  one makes 4 queued.
+  Re-enable all 4
+  workflows in Settings
+  > Actions to resume.
